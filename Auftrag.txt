@@ -1,0 +1,16 @@
+Voice Intelligence App
+Ziel
+Entwickle eine Desktop-Anwendung, die Spracheingaben aufnimmt, transkribiert und durch KI-gestützte Verarbeitung anreichert. Das Ergebnis soll direkt nutzbar sein - z.B. als strukturierte Notiz, formatierter Text, oder kontextbezogen aufbereiteter Output.
+
+Stack
+Framework:Next.js + Desktop-Runtime (z.B. Tauri, Electron)
+Voice-to-Text:Beliebig (lokal oder API-basiert)
+LLM-Integration:Beliebig
+Alle Libraries/Services sind erlaubt, solange Next.js die Basis bildet.
+
+Leitplanken
+Desktop-App:Die Anwendung läuft als eigenständige Desktop-Applikation.
+Voice-Pipeline:Aufnahme → Transkription → Enrichment. Was Enrichment konkret bedeutet, ist dir überlassen - z.B. Formatierung, Zusammenfassung, Kontext-Anpassung, oder andere kreative Ansätze.
+Hotkey-Aktivierung:Die App soll per Tastenkombination aktivierbar sein, um nahtlos im Workflow nutzbar zu sein.
+Nutzbar:Ein User kann die App starten, per Hotkey aktivieren, sprechen, und erhält ein verarbeitetes Ergebnis.
+README:Kurzbeschreibung des Problems, Architektur-Überblick, Setup-Anleitung, und Design-Entscheidungen.
