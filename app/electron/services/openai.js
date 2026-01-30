@@ -29,7 +29,12 @@ const getClient = async () => {
   return clientPromise;
 };
 
-const enrichText = async ({ text, preset, language = "de" }) => {
+const enrichText = async ({
+  text,
+  preset,
+  language = "de",
+  includeEmojis = false,
+}) => {
   if (!text) {
     throw new Error("Missing text to enrich");
   }
@@ -39,13 +44,17 @@ const enrichText = async ({ text, preset, language = "de" }) => {
   const instruction = PRESET_INSTRUCTIONS[preset] || PRESET_INSTRUCTIONS.notes;
   const outputLanguage = LANGUAGE_OUTPUT[language] || LANGUAGE_OUTPUT.de;
 
+  const emojiInstruction = includeEmojis
+    ? "Include tasteful emojis where helpful."
+    : "Do not use emojis.";
+
   const completion = await client.chat.completions.create({
     model,
     temperature: 0.2,
     messages: [
       {
         role: "system",
-        content: `You format transcripts into clean, usable outputs. Respond in Markdown with no preamble. Output language: ${outputLanguage}.`,
+        content: `You format transcripts into clean, usable outputs. Respond in Markdown with no preamble. Output language: ${outputLanguage}. ${emojiInstruction}`,
       },
       {
         role: "user",

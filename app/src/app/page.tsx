@@ -99,6 +99,14 @@ const UI_TEXT = {
       transcript: "Noch kein Transkript. Aufnahme starten, um zu erfassen.",
       enrichment: "Noch keine Ausgabe. Sprich, um eine Anreicherung zu erzeugen.",
     },
+    transcriptStats: {
+      words: "Woerter",
+      readTime: "Lesedauer",
+      speakTime: "Sprechdauer",
+    },
+    enrichmentOptions: {
+      emojis: "Emojis verwenden",
+    },
     toggles: {
       rendered: "Gerendert",
       markdown: "Markdown",
@@ -180,6 +188,14 @@ const UI_TEXT = {
       transcript: "No transcript yet. Start recording to capture.",
       enrichment: "No output yet. Speak to generate enrichment.",
     },
+    transcriptStats: {
+      words: "Words",
+      readTime: "Read time",
+      speakTime: "Speak time",
+    },
+    enrichmentOptions: {
+      emojis: "Include emojis",
+    },
     toggles: {
       rendered: "Rendered",
       markdown: "Markdown",
@@ -241,6 +257,22 @@ const drawWaveform = (
   ctx.stroke();
 };
 
+const WORDS_PER_MINUTE_READ = 200;
+const WORDS_PER_MINUTE_SPEAK = 130;
+
+const countWords = (value: string) => {
+  const trimmed = value.trim();
+  if (!trimmed) return 0;
+  return trimmed.split(/\s+/).length;
+};
+
+const formatDuration = (seconds: number) => {
+  const total = Math.max(0, Math.ceil(seconds));
+  const mins = Math.floor(total / 60);
+  const secs = total % 60;
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+};
+
 export default function Home() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -248,6 +280,7 @@ export default function Home() {
   const [enriched, setEnriched] = useState("");
   const [preset, setPreset] = useState<PresetId>(PRESETS[0].id);
   const [language, setLanguage] = useState<Language>("de");
+  const [includeEmojis, setIncludeEmojis] = useState(false);
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>("default");
   const [showMarkdown, setShowMarkdown] = useState(false);
@@ -257,6 +290,7 @@ export default function Home() {
   const selectedDeviceRef = useRef<string>("default");
   const toggleRef = useRef<() => void>(() => {});
   const languageRef = useRef<Language>("de");
+  const includeEmojisRef = useRef(false);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -272,6 +306,16 @@ export default function Home() {
   const lastLevelSentRef = useRef<number>(0);
 
   const statusLabel = useMemo(() => text.status[status], [status, text]);
+
+  const transcriptWordCount = useMemo(() => countWords(transcript), [transcript]);
+  const readTime = useMemo(
+    () => formatDuration((transcriptWordCount / WORDS_PER_MINUTE_READ) * 60),
+    [transcriptWordCount]
+  );
+  const speakTime = useMemo(
+    () => formatDuration((transcriptWordCount / WORDS_PER_MINUTE_SPEAK) * 60),
+    [transcriptWordCount]
+  );
 
   const loadDevices = async () => {
     try {
@@ -298,6 +342,10 @@ export default function Home() {
     if (savedLanguage === "de" || savedLanguage === "en") {
       setLanguage(savedLanguage);
     }
+    const savedEmojis = window.localStorage.getItem("voice:includeEmojis");
+    if (savedEmojis === "true" || savedEmojis === "false") {
+      setIncludeEmojis(savedEmojis === "true");
+    }
     loadDevices();
     const handler = () => loadDevices();
     navigator.mediaDevices.addEventListener("devicechange", handler);
@@ -309,6 +357,11 @@ export default function Home() {
     document.documentElement.lang = language;
     languageRef.current = language;
   }, [language]);
+
+  useEffect(() => {
+    window.localStorage.setItem("voice:includeEmojis", String(includeEmojis));
+    includeEmojisRef.current = includeEmojis;
+  }, [includeEmojis]);
 
   useEffect(() => {
     selectedDeviceRef.current = selectedDeviceId;
@@ -449,6 +502,7 @@ export default function Home() {
               text: nextTranscript,
               preset,
               language: languageRef.current,
+              includeEmojis: includeEmojisRef.current,
             });
             setEnriched(enrichment?.output ?? "");
           } else {
@@ -513,6 +567,7 @@ export default function Home() {
         text: transcript,
         preset,
         language,
+        includeEmojis,
       });
       setEnriched(enrichment?.output ?? "");
       setStatus("idle");
@@ -653,8 +708,19 @@ export default function Home() {
                 {status === "recording" ? text.controls.stop : text.controls.record}
               </button>
 
-              <div className="block">
+              <div className="block transcript">
                 {transcript || text.placeholders.transcript}
+              </div>
+              <div className="transcript-meta">
+                <span>
+                  {text.transcriptStats.words}: {transcriptWordCount}
+                </span>
+                <span>
+                  {text.transcriptStats.readTime}: {readTime}
+                </span>
+                <span>
+                  {text.transcriptStats.speakTime}: {speakTime}
+                </span>
               </div>
 
               <div className="actions">
@@ -686,6 +752,17 @@ export default function Home() {
                     {item.labels[language]}
                   </button>
                 ))}
+              </div>
+
+              <div className="option-row">
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={includeEmojis}
+                    onChange={(event) => setIncludeEmojis(event.target.checked)}
+                  />
+                  <span>{text.enrichmentOptions.emojis}</span>
+                </label>
               </div>
 
               <div className="markdown-toggle">

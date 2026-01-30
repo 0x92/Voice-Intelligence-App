@@ -11,6 +11,7 @@ declare global {
         text: string;
         preset: string;
         language?: "de" | "en";
+        includeEmojis?: boolean;
       }) => Promise<{
         output: string;
         mode?: string;

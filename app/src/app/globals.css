@@ -285,9 +285,23 @@ select {
   white-space: pre-wrap;
 }
 
+.block.transcript {
+  max-height: 240px;
+  overflow: auto;
+}
+
 .block.markdown {
   max-height: 240px;
   overflow: auto;
+}
+
+.transcript-meta {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 10px;
+  color: var(--muted);
 }
 
 .actions {
@@ -322,6 +336,22 @@ select {
 .preset.active {
   border-color: var(--bright);
   color: var(--bright);
+}
+
+.option-row {
+  margin-top: 8px;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text);
+}
+
+.checkbox input {
+  accent-color: var(--bright);
 }
 
 .markdown-toggle {
