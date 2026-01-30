@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Doomsday</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Anton', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .clock-container {
+            text-align: center;
+            position: relative;
+        }
+
+        .clock-face {
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: #fff;
+            position: relative;
+            box-shadow: 0 0 100px rgba(255, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .quarter-warning {
+            position: absolute;
+            top: 0; right: 0;
+            width: 50%; height: 50%;
+            background: #f00;
+            transform-origin: bottom left;
+            clip-path: polygon(0 100%, 100% 0, 100% 100%);
+        }
+
+        .hand-minute {
+            position: absolute;
+            bottom: 50%; left: 50%;
+            width: 8px; height: 220px;
+            background: #000;
+            transform-origin: bottom center;
+            transform: rotate(-5deg); /* Close to midnight */
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .hand-hour {
+            position: absolute;
+            bottom: 50%; left: 50%;
+            width: 12px; height: 150px;
+            background: #000;
+            transform-origin: bottom center;
+            transform: rotate(0deg); /* At 12 */
+        }
+
+        .title {
+            font-size: 60px;
+            text-transform: uppercase;
+            margin-top: 40px;
+            color: #f00;
+            letter-spacing: 5px;
+        }
+
+        .subtitle {
+            font-family: monospace;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        .transcript-ticker {
+            width: 600px;
+            background: #222;
+            color: #f00;
+            padding: 10px;
+            font-family: monospace;
+            margin-top: 40px;
+            border: 1px solid #444;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .btn-panic {
+            background: #f00;
+            color: #fff;
+            border: none;
+            padding: 20px 40px;
+            font-size: 24px;
+            font-family: 'Anton', sans-serif;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 0 20px #f00;
+            animation: pulse-panic 1s infinite;
+        }
+
+        @keyframes pulse-panic {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="clock-container">
+        <div class="clock-face">
+            <div class="quarter-warning"></div>
+            <div style="position: absolute; top: 50%; left: 50%; width: 20px; height: 20px; background: #000; border-radius: 50%; transform: translate(-50%, -50%); z-index: 10;"></div>
+            <div class="hand-hour"></div>
+            <div class="hand-minute"></div>
+        </div>
+
+        <div class="title">It Is Time</div>
+        <div class="subtitle">100 Seconds to Midnight</div>
+
+        <div class="transcript-ticker">
+            ALERT: AUDIO INPUT DETECTED /// CLASSIFIED INFORMATION /// RECORDING STARTED /// DO NOT PANIC
+        </div>
+
+        <button class="btn-panic">Broadcast Warning</button>
+    </div>
+</body>
+</html>

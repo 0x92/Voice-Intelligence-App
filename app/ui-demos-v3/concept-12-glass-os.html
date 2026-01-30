@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Glass OS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap');
+
+        body {
+            margin: 0;
+            height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        /* Vivid background blobs */
+        .background {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+        }
+
+        .b1 { width: 600px; height: 600px; background: #ff0080; top: -100px; left: -100px; }
+        .b2 { width: 500px; height: 500px; background: #7928ca; bottom: -50px; right: -50px; }
+        .b3 { width: 400px; height: 400px; background: #0070f3; top: 20%; left: 30%; }
+
+        .window {
+            width: 800px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            display: grid;
+            grid-template-rows: 40px 1fr;
+            overflow: hidden;
+        }
+
+        .title-bar {
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            background: rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+
+        .app-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 12px;
+            border-radius: 12px;
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+        }
+
+        .nav-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .nav-btn.active { background: rgba(255,255,255,0.2); color: #fff; }
+
+        .main-view {
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .transcript {
+            margin-bottom: auto;
+            line-height: 1.6;
+            font-size: 18px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .glass-btn {
+            align-self: flex-start;
+            padding: 12px 24px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .glass-btn:hover {
+            background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
+        }
+
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+    </div>
+
+    <div class="window">
+        <div class="title-bar">
+            <div class="dots">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div style="flex:1; text-align: center; font-size: 14px; font-weight: 600; opacity: 0.8;">Voice Experience</div>
+        </div>
+        <div class="app-content">
+            <div class="sidebar">
+                <button class="nav-btn active">● Live Capture</button>
+                <button class="nav-btn">Library</button>
+                <button class="nav-btn">Favorites</button>
+                <button class="nav-btn">Settings</button>
+            </div>
+            <div class="main-view">
+                <div class="transcript">
+                    "The clarity of the glass interface reflects the transparency of our thoughts. It's not just about seeing through, but seeing with perspective."
+                </div>
+                <button class="glass-btn">Stop Recording</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

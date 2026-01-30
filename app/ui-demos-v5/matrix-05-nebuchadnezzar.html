@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Nebuchadnezzar</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&display=swap');
+
+        body {
+            background-color: #1a1a1a; /* Grimy metal dark */
+            color: #c0c0c0;
+            font-family: 'Chakra Petch', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Metal texture simulation */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.1'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .console-frame {
+            width: 800px;
+            background: #252525;
+            border: 8px solid #444;
+            border-radius: 4px;
+            box-shadow: inset 0 0 20px #000, 0 10px 20px rgba(0,0,0,0.5);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .monitor-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .monitor {
+            background: #000;
+            border: 4px inset #333;
+            border-radius: 20px; /* CRT curve */
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        /* CRT Glow */
+        .monitor::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.6) 100%);
+            pointer-events: none;
+        }
+
+        .monitor-lg { flex: 2; height: 300px; }
+        .monitor-sm { flex: 1; height: 300px; display: flex; flex-direction: column; justify-content: space-between; }
+
+        .analog-waves {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sine-wave {
+            stroke: #aaffaa;
+            stroke-width: 2;
+            fill: none;
+            filter: drop-shadow(0 0 2px #aaffaa);
+        }
+
+        .knobs-panel {
+            background: #333;
+            padding: 10px;
+            border-top: 2px solid #555;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        .knob {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: radial-gradient(#666, #222);
+            border: 2px solid #111;
+            position: relative;
+            box-shadow: 0 5px 5px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        
+        .knob::after {
+            content: '';
+            position: absolute;
+            top: 5px; left: 50%;
+            width: 2px; height: 15px;
+            background: #fff;
+            transform: translateX(-50%);
+        }
+
+        .label {
+            text-align: center;
+            font-size: 10px;
+            margin-top: 5px;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        .dirty-screen {
+            color: #aaffaa;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .toggle-switch {
+            width: 30px;
+            height: 60px;
+            background: #111;
+            margin: 0 auto;
+            border: 1px solid #555;
+            position: relative;
+        }
+        .toggle-lever {
+            width: 100%; height: 50%;
+            background: #888;
+            border: 2px solid #ccc;
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="console-frame">
+        <div style="color: #666; font-size: 12px; text-align: right; margin-bottom: -10px;">HOVERCRAFT: MARK II</div>
+        
+        <div class="monitor-row">
+            <div class="monitor monitor-lg">
+                <div class="analog-waves">
+                    <svg viewBox="0 0 500 200" width="100%" height="100%">
+                        <path class="sine-wave" d="M0,100 Q50,0 100,100 T200,100 T300,100 T400,100 T500,100">
+                            <animate attributeName="d" 
+                                values="M0,100 Q50,0 100,100 T200,100 T300,100 T400,100 T500,100;
+                                        M0,100 Q50,200 100,100 T200,100 T300,100 T400,100 T500,100;
+                                        M0,100 Q50,0 100,100 T200,100 T300,100 T400,100 T500,100" 
+                                dur="2s" repeatCount="indefinite" />
+                        </path>
+                    </svg>
+                </div>
+                <div style="position: absolute; top: 10px; left: 10px; color: #aaffaa; font-size: 12px;">SIGNAL_FREQ: 108.2</div>
+            </div>
+
+            <div class="monitor monitor-sm" style="background: #111;">
+                <div class="dirty-screen">
+                    > EMP: CHARGED<br>
+                    > SHIELDS: 40%<br>
+                    > PROXIMITY: CLEAR
+                </div>
+                <div style="text-align: center;">
+                    <div class="toggle-switch">
+                        <div class="toggle-lever"></div>
+                    </div>
+                    <div class="label">BROADCAST</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="knobs-panel">
+            <div><div class="knob" style="transform: rotate(-45deg);"></div><div class="label">Gain</div></div>
+            <div><div class="knob" style="transform: rotate(90deg);"></div><div class="label">Filter</div></div>
+            <div><div class="knob" style="transform: rotate(0deg);"></div><div class="label">Freq</div></div>
+            <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+                <div style="width: 10px; height: 10px; background: red; border-radius: 50%; box-shadow: 0 0 5px red;"></div>
+                <span style="font-size: 12px;">REC</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

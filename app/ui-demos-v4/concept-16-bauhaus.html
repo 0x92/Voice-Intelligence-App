@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Bauhaus</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap');
+
+        :root {
+            --red: #D22630;
+            --blue: #0064A8;
+            --yellow: #FFCE00;
+            --black: #1A1A1A;
+            --white: #F0F0F0;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--black);
+            font-family: 'Jost', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .composition {
+            width: 800px;
+            height: 500px;
+            display: grid;
+            grid-template-columns: 200px 1fr 100px;
+            grid-template-rows: 100px 1fr 100px;
+            background: #fff;
+            box-shadow: 20px 20px 0 rgba(0,0,0,0.1);
+        }
+
+        .header {
+            grid-column: 1 / span 2;
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .mic-box {
+            grid-column: 3;
+            background: var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .mic-box:hover { opacity: 0.9; }
+
+        .circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--white);
+        }
+
+        .sidebar {
+            grid-row: 2 / span 2;
+            background: var(--blue);
+            padding: 40px 20px;
+            color: var(--white);
+        }
+
+        .nav-item {
+            margin-bottom: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+        .nav-item.active { opacity: 1; text-decoration: underline; }
+
+        .content {
+            grid-column: 2;
+            grid-row: 2;
+            padding: 40px;
+            font-size: 20px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .geometric-decor {
+            grid-column: 3;
+            grid-row: 2;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tri {
+            width: 0; height: 0; 
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 86.6px solid var(--yellow);
+            position: absolute;
+            bottom: 20px; left: 0;
+        }
+
+        .footer-fill {
+            grid-column: 2 / span 2;
+            background: var(--yellow);
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="composition">
+        <div class="header">Form Follows Voice</div>
+        <div class="mic-box" title="Record">
+            <div class="circle"></div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="nav-item active">INPUT</div>
+            <div class="nav-item">PROCESS</div>
+            <div class="nav-item">OUTPUT</div>
+        </div>
+
+        <div class="content">
+            <p><strong>Design is not just what it looks like and feels like. Design is how it works.</strong></p>
+            <p style="opacity: 0.5;">— Steve Jobs (echoing Bauhaus principles)</p>
+        </div>
+
+        <div class="geometric-decor">
+            <div class="tri"></div>
+        </div>
+
+        <div class="footer-fill">
+            STATUS: WAITING_
+        </div>
+    </div>
+</body>
+</html>

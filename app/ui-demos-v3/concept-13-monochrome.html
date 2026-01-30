@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Monochrome</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;900&display=swap');
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Archivo', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            border-bottom: 2px solid #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 900;
+            font-size: 32px;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+        }
+
+        .left-panel {
+            flex: 1;
+            padding: 40px;
+            border-right: 2px solid #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .right-panel {
+            width: 300px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 8vw;
+            line-height: 0.8;
+            margin: 0;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .action-item {
+            padding: 30px;
+            border-bottom: 2px solid #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .action-item:hover {
+            background: #fff;
+            color: #000;
+        }
+        
+        .action-item:hover::after {
+            content: "→";
+        }
+
+        .big-rec-btn {
+            width: 100px;
+            height: 100px;
+            background: #fff;
+            border-radius: 50%;
+            margin-top: 40px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .big-rec-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px; height: 40px;
+            background: #000;
+            border-radius: 50%;
+        }
+
+        .big-rec-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .ticker {
+            padding: 10px;
+            background: #fff;
+            color: #000;
+            overflow: hidden;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Noir.Audio</div>
+        <div>V 1.0</div>
+    </header>
+
+    <main>
+        <div class="left-panel">
+            <h1>Speak<br>Your<br>Mind.</h1>
+            <div class="big-rec-btn"></div>
+        </div>
+        
+        <div class="right-panel">
+            <div class="action-item">Transcribe</div>
+            <div class="action-item">Summarize</div>
+            <div class="action-item">Export</div>
+            <div class="action-item" style="border-bottom: none; margin-top: auto;">Settings</div>
+        </div>
+    </main>
+
+    <div class="ticker">
+        WAITING FOR INPUT /// SYSTEM READY /// MICROPHONE DETECTED /// WAITING FOR INPUT
+    </div>
+</body>
+</html>

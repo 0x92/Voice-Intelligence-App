@@ -1,0 +1,120 @@
+# Voice Intelligence App (Electron + Next.js)
+
+Eine Desktop‑App für schnelle Spracheingaben: lokal transkribieren, mit OpenAI strukturieren, sofort nutzbar.  
+Optimiert für Fokus‑Workflows (Hotkeys, Tray‑Modus, Recording‑Indicator).
+
+---
+## Executive Summary (für CTO)
+- **Ziel:** Spracheingaben in produktive, strukturierte Outputs verwandeln (Notizen, Summary, Tasks).
+- **Kernvorteile:** Lokale Transkription (Whisper.cpp), minimale Latenz, keine Audio‑Cloud; nur Text geht an OpenAI.
+- **Deployment:** Electron Desktop, keine Server‑Infrastruktur nötig.
+- **Security:** API‑Key lokal; Audio bleibt auf dem Gerät; optional vollständig offline (ohne OpenAI).
+
+---
+## Features
+- Globale Hotkeys:
+  - App ein/ausblenden: `Ctrl/Cmd + Shift + Space`
+  - Aufnahme starten/stoppen: `Ctrl/Cmd + Shift + R`
+- Tray‑Modus: X schließt nicht, sondern minimiert in den Tray.
+- On‑Screen Recording‑Indicator (Timer + Mic‑Name).
+- Lokale STT via **whisper.cpp** (ggml‑Modelle).
+- OpenAI‑Enrichment (Presets: Notes, Summary, Action Items, Email).
+- Geräte‑Auswahl für Mikrofon (persistiert).
+
+---
+## Architektur
+**Renderer (Next.js):**
+UI, Audio‑Capture, Status, Presets, Waveform‑Visualisierung.
+
+**Main (Electron):**
+Global Hotkeys, Tray, IPC, lokale Services.
+
+**STT Service:**
+`ffmpeg` → WAV 16kHz → Whisper.cpp CLI → Textdatei.
+
+**LLM Service:**
+OpenAI Chat Completion → strukturierte Ausgabe.
+
+---
+## Setup (Developer)
+
+### 1) Install
+```bash
+cd app
+npm install
+```
+
+### 2) Whisper.cpp Binary + Modell
+**Binary (Windows):**  
+https://github.com/ggerganov/whisper.cpp/releases
+
+**Modell (multilingual, z. B. `ggml-base.bin`):**  
+https://huggingface.co/ggerganov/whisper.cpp
+
+Empfohlene Ordnerstruktur:
+```
+app/
+  whisper/   -> enthält main.exe oder whisper-cli.exe
+  models/    -> enthält ggml-base.bin
+```
+
+### 3) `.env` konfigurieren
+```env
+WHISPER_CPP_PATH=D:/Entwicklung/Voice Intelligence App Challenge/app/whisper/whisper-cli.exe
+WHISPER_MODEL_PATH=D:/Entwicklung/Voice Intelligence App Challenge/app/models/ggml-base.bin
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4o-mini
+# Deutsch erzwingen:
+WHISPER_CPP_ARGS=--language de
+```
+
+### 4) Dev starten
+```bash
+npm run dev
+```
+
+### 5) Build (Production)
+```bash
+npm run build
+npm run start
+```
+
+---
+## Troubleshooting
+
+**Transcribing hängt (UI bleibt bei “Transcribing locally…”):**
+- Prüfe, ob `WHISPER_CPP_PATH` wirklich whisper.cpp ist:
+  ```powershell
+  & "D:\path\to\whisper-cli.exe" -h
+  ```
+  Wenn dort Node‑Optionen stehen → falsche Binary.
+
+**Deutsch wird als Englisch erkannt:**
+- Multilingual‑Modell verwenden (`ggml-base.bin`, nicht `.en`)
+- `WHISPER_CPP_ARGS=--language de`
+
+**Hotkey funktioniert nicht:**
+- Prüfen ob andere Tools den Shortcut blockieren.
+- Tray‑Menü nutzen (Start/Stop Recording).
+
+---
+## Sicherheit & Datenschutz
+- Audio bleibt lokal, Transkription erfolgt on‑device.
+- Nur der **Text** wird an OpenAI gesendet.
+- API‑Key niemals committen; `.env` ist ignored.
+
+---
+## Projektstruktur (relevant)
+```
+app/
+  electron/            # Main‑Process + Services
+  src/app/             # UI (Next.js)
+  models/              # Whisper Modelle (ignored)
+  whisper/             # Whisper.cpp Binary (ignored)
+```
+
+---
+## Nächste Schritte (optional)
+- Auswahl der finalen UI‑Variante aus `ui-demos/`
+- Packaging via `electron-builder`
+- Persistente History + Export Formate

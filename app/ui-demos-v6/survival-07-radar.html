@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Radar</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap');
+
+        body {
+            background-color: #001a00;
+            color: #00ff00;
+            font-family: 'Inconsolata', monospace;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .radar-screen {
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            border: 2px solid #005500;
+            background: 
+                radial-gradient(circle, transparent 20%, #003300 21%, transparent 22%),
+                radial-gradient(circle, transparent 40%, #003300 41%, transparent 42%),
+                radial-gradient(circle, transparent 60%, #003300 61%, transparent 62%),
+                radial-gradient(circle, transparent 80%, #003300 81%, transparent 82%);
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Crosshairs */
+        .radar-screen::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 0; width: 100%; height: 1px;
+            background: #005500;
+        }
+        .radar-screen::after {
+            content: '';
+            position: absolute;
+            left: 50%; top: 0; width: 1px; height: 100%;
+            background: #005500;
+        }
+
+        .sweep {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 255, 0, 0.4) 30deg, transparent 30deg);
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .blip {
+            position: absolute;
+            width: 8px; height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff00;
+            opacity: 0;
+            animation: blip-fade 4s infinite;
+        }
+        
+        .b1 { top: 30%; left: 60%; animation-delay: 1.2s; }
+        .b2 { top: 70%; left: 40%; animation-delay: 2.5s; }
+
+        @keyframes blip-fade {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .info-overlay {
+            position: absolute;
+            top: 20px; right: 20px;
+            text-align: right;
+            background: rgba(0, 20, 0, 0.8);
+            padding: 10px;
+            border: 1px solid #005500;
+        }
+
+        .transcript-window {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            background: rgba(0, 20, 0, 0.9);
+            border: 1px solid #00ff00;
+            padding: 10px;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .pulse-line {
+            width: 100%; height: 2px; background: #00ff00;
+            margin-top: 5px;
+            animation: pulse-width 1s infinite;
+        }
+        @keyframes pulse-width { 0% { width: 20%; opacity: 0.5; } 50% { width: 90%; opacity: 1; } 100% { width: 20%; opacity: 0.5; } }
+
+    </style>
+</head>
+<body>
+    <div class="radar-screen">
+        <div class="sweep"></div>
+        <div class="blip b1"></div>
+        <div class="blip b2"></div>
+
+        <div class="info-overlay">
+            RANGE: 50KM<br>
+            MODE: PASSIVE<br>
+            FREQ: 140.85
+        </div>
+
+        <div class="transcript-window">
+            <div style="font-size: 12px; color: #00aa00; margin-bottom: 5px;">INTERCEPTED SIGNAL:</div>
+            "Is anyone out there? This is Outpost 4. We are compromised."
+            <div class="pulse-line"></div>
+        </div>
+    </div>
+</body>
+</html>

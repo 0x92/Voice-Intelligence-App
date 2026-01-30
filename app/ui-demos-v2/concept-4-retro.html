@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Retro</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        :root {
+            --bg: #2b0f42;
+            --panel: #4a1c6e;
+            --pink: #ff00ff;
+            --cyan: #00ffff;
+            --yellow: #ffff00;
+        }
+
+        body {
+            background: var(--bg);
+            font-family: 'VT323', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: var(--cyan);
+            background-image: linear-gradient(var(--panel) 1px, transparent 1px),
+            linear-gradient(90deg, var(--panel) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .window {
+            width: 800px;
+            background: #111;
+            border: 4px solid var(--pink);
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .title-bar {
+            background: var(--pink);
+            color: #fff;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 24px;
+            text-transform: uppercase;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-win {
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border: 2px solid #000;
+            box-shadow: inset -2px -2px 0 #aaa;
+        }
+
+        .content-area {
+            padding: 20px;
+        }
+
+        .crt-monitor {
+            background: #000;
+            border: 4px solid #555;
+            border-radius: 10px;
+            padding: 20px;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,1);
+            color: var(--yellow);
+            font-size: 24px;
+            text-shadow: 2px 2px 0 rgba(255,0,255,0.5);
+        }
+
+        .scan-line {
+            width: 100%;
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            position: absolute;
+            animation: scan 5s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .retro-btn {
+            background: silver;
+            border: 4px outset white;
+            padding: 10px 30px;
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            cursor: pointer;
+            active: border-style: inset;
+        }
+        
+        .retro-btn:active {
+            border-style: inset;
+        }
+
+        .retro-btn.record {
+            color: red;
+            font-weight: bold;
+        }
+
+        .blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <span>VOICE_MASTER_3000.EXE</span>
+            <div class="controls">
+                <div class="btn-win"></div>
+                <div class="btn-win"></div>
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="crt-monitor">
+                <div class="scan-line"></div>
+                C:\USERS\VOICE> INIT_SEQUENCE<br>
+                C:\USERS\VOICE> LOAD "AI_MODEL"<br>
+                LOADING... OK<br><br>
+                READY FOR INPUT.<br>
+                > <span class="blink">_</span>
+            </div>
+
+            <div class="toolbar">
+                <button class="retro-btn record">● REC</button>
+                <button class="retro-btn">PLAY</button>
+                <button class="retro-btn">SAVE</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Terminal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+        body {
+            background-color: #0d1117;
+            color: #39ff14; /* P3 Green */
+            font-family: 'VT323', monospace;
+            font-size: 24px;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
+            text-shadow: 0 0 5px #39ff14;
+        }
+
+        .terminal {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .prompt::before {
+            content: "user@voice-sys:~$ ";
+            color: #ebff00;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 12px;
+            height: 24px;
+            background: #39ff14;
+            animation: blink 1s step-end infinite;
+            vertical-align: sub;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .output {
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+
+        .success { color: #39ff14; }
+        .error { color: #ff3333; }
+        .info { color: #00e5ff; }
+
+        /* Scanline overlay */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #39ff14;
+            color: #000;
+            padding: 5px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            color: #fff;
+        }
+        th { text-align: left; border-bottom: 1px dashed #555; }
+        td { padding: 5px 0; }
+
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="output">
+            VoiceOS Kernel v5.4.0-generic<br>
+            Copyright (c) 2026 Voice Corp.<br><br>
+            
+            [ <span class="success">OK</span> ] Mounted filesystem.<br>
+            [ <span class="success">OK</span> ] Started Audio Service.<br>
+            [ <span class="success">OK</span> ] Connected to Neural Engine.<br>
+        </div>
+
+        <div class="output">
+            <span class="info">COMMANDS:</span>
+            <table>
+                <tr><th>CMD</th><th>DESCRIPTION</th></tr>
+                <tr><td>rec -s</td><td>Start recording stream</td></tr>
+                <tr><td>analyze</td><td>Run NLP on buffer</td></tr>
+                <tr><td>clear</td><td>Clear terminal</td></tr>
+            </table>
+        </div>
+
+        <div class="prompt">rec -s --format=wav</div>
+        <div class="output">
+            > Initializing microphone... <span class="success">DONE</span><br>
+            > Recording... [BUFFER: 24KB]<br>
+            > Press Ctrl+C to stop.
+        </div>
+
+        <div class="prompt"><span class="cursor"></span></div>
+    </div>
+
+    <div class="status-bar">
+        <span>MODE: INSERT</span>
+        <span>MEM: 64%</span>
+        <span>CPU: 12%</span>
+    </div>
+</body>
+</html>

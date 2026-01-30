@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - HUD</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap');
+
+        :root {
+            --hud-color: #0affff;
+            --hud-bg: rgba(0, 20, 30, 0.85);
+            --alert: #ff3333;
+        }
+
+        body {
+            background: #000 url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            color: var(--hud-color);
+            font-family: 'Rajdhani', sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Darken background */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: -1;
+        }
+
+        .hud-container {
+            width: 900px;
+            height: 600px;
+            position: relative;
+            border: 1px solid rgba(10, 255, 255, 0.3);
+            background: rgba(0, 10, 20, 0.6);
+            clip-path: polygon(
+                20px 0, 100% 0, 100% calc(100% - 20px), 
+                calc(100% - 20px) 100%, 0 100%, 0 20px
+            );
+        }
+
+        /* Decorative corners */
+        .corner {
+            position: absolute;
+            width: 20px; height: 20px;
+            border: 2px solid var(--hud-color);
+            transition: all 0.3s;
+        }
+        .tl { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .tr { top: 0; right: 0; border-left: none; border-bottom: none; }
+        .bl { bottom: 0; left: 0; border-right: none; border-top: none; }
+        .br { bottom: 0; right: 0; border-left: none; border-top: none; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+            border-bottom: 1px solid rgba(10, 255, 255, 0.2);
+            background: linear-gradient(90deg, transparent, rgba(10, 255, 255, 0.1), transparent);
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--hud-color);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 200px 1fr 200px;
+            height: calc(100% - 70px);
+        }
+
+        .col {
+            padding: 20px;
+            border-right: 1px solid rgba(10, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .col:last-child { border: none; }
+
+        .stat-box {
+            border: 1px solid rgba(10, 255, 255, 0.3);
+            padding: 10px;
+            text-align: center;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .circle-graph {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 5px solid rgba(10, 255, 255, 0.1);
+            border-top: 5px solid var(--hud-color);
+            margin: 0 auto 10px;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .center-display {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .waveform {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            height: 100px;
+            width: 100%;
+        }
+        
+        .bar {
+            width: 6px;
+            background: var(--hud-color);
+            box-shadow: 0 0 10px var(--hud-color);
+            animation: wave 1s infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { height: 10px; }
+            50% { height: 60px; }
+        }
+
+        .transcript {
+            margin-top: 20px;
+            font-size: 20px;
+            text-align: center;
+            width: 80%;
+        }
+
+        .rec-btn {
+            width: 60px; height: 60px;
+            border: 2px solid var(--alert);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: var(--alert);
+            margin-top: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 51, 51, 0.2);
+            transition: all 0.3s;
+        }
+
+        .rec-btn:hover {
+            background: rgba(255, 51, 51, 0.2);
+            box-shadow: 0 0 40px rgba(255, 51, 51, 0.4);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="hud-container">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+
+        <div class="header">
+            <div class="title">J.A.R.V.I.S. Protocol</div>
+            <div style="font-size: 12px; align-self: center;">SYS.STATUS: NORMAL</div>
+        </div>
+
+        <div class="grid">
+            <div class="col">
+                <div class="stat-box">
+                    <div style="font-size: 12px; margin-bottom: 5px;">CPU LOAD</div>
+                    <div style="font-size: 24px; font-weight: bold;">12%</div>
+                </div>
+                <div class="stat-box">
+                    <div style="font-size: 12px; margin-bottom: 5px;">MEMORY</div>
+                    <div style="font-size: 24px; font-weight: bold;">4.2GB</div>
+                </div>
+                <div style="flex: 1; border: 1px dashed rgba(10,255,255,0.2);"></div>
+            </div>
+
+            <div class="col center-display">
+                <div class="waveform">
+                    <div class="bar" style="animation-delay: 0.1s"></div>
+                    <div class="bar" style="animation-delay: 0.2s"></div>
+                    <div class="bar" style="animation-delay: 0.3s"></div>
+                    <div class="bar" style="animation-delay: 0.5s"></div>
+                    <div class="bar" style="animation-delay: 0.2s"></div>
+                </div>
+                <div class="transcript">
+                    "Analyzing vocal patterns. Subject identified."
+                </div>
+                <div class="rec-btn">●</div>
+            </div>
+
+            <div class="col">
+                <div class="stat-box">
+                    <div class="circle-graph"></div>
+                    <div>AUDIO INPUT</div>
+                </div>
+                <div class="stat-box" style="text-align: left; padding: 15px;">
+                    <div style="font-size: 10px; color: rgba(10,255,255,0.7);">Directives:</div>
+                    <ul style="padding-left: 20px; font-size: 12px; margin: 5px 0;">
+                        <li>Listen</li>
+                        <li>Process</li>
+                        <li>Execute</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Construct</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+
+        body {
+            background-color: #fff;
+            color: #333;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* The Construct "White Room" feel */
+        .white-room {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at center, #ffffff 0%, #e0e0e0 100%);
+            z-index: -1;
+        }
+
+        .grid-floor {
+            position: absolute;
+            bottom: -200px;
+            left: -50%;
+            width: 200%;
+            height: 1000px;
+            background-image: 
+                linear-gradient(#ccc 1px, transparent 1px),
+                linear-gradient(90deg, #ccc 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(80deg);
+            opacity: 0.3;
+        }
+
+        .container {
+            text-align: center;
+            width: 600px;
+        }
+
+        h1 {
+            font-weight: 100;
+            font-size: 60px;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        p {
+            font-weight: 300;
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 50px;
+        }
+
+        .visualizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 150px;
+            gap: 5px;
+            margin-bottom: 50px;
+        }
+
+        .column {
+            width: 20px;
+            background: #333;
+            height: 20px;
+            transition: height 0.1s;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn-minimal {
+            background: transparent;
+            border: 1px solid #999;
+            padding: 15px 40px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #333;
+        }
+
+        .btn-minimal:hover {
+            background: #333;
+            color: #fff;
+            border-color: #333;
+        }
+
+        .floating-menu {
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            text-align: right;
+        }
+        
+        .menu-item {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #888;
+        }
+        .menu-item:hover { color: #000; }
+
+    </style>
+</head>
+<body>
+    <div class="white-room"></div>
+    <div class="grid-floor"></div>
+
+    <div class="floating-menu">
+        <div class="menu-item">LOAD PROGRAM: VOICE</div>
+        <div class="menu-item">LOAD PROGRAM: DOJO</div>
+        <div class="menu-item">LOAD PROGRAM: JUMP</div>
+        <div class="menu-item">EXIT</div>
+    </div>
+
+    <div class="container">
+        <h1>The Construct</h1>
+        <p>Your loading area for voice intelligence.</p>
+
+        <div class="visualizer" id="vis">
+            <!-- JS will animate these height -->
+            <div class="column" style="height: 40px;"></div>
+            <div class="column" style="height: 60px;"></div>
+            <div class="column" style="height: 90px;"></div>
+            <div class="column" style="height: 50px;"></div>
+            <div class="column" style="height: 70px;"></div>
+            <div class="column" style="height: 100px;"></div>
+            <div class="column" style="height: 60px;"></div>
+            <div class="column" style="height: 30px;"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn-minimal">Initialize</button>
+            <button class="btn-minimal">Settings</button>
+        </div>
+    </div>
+
+    <script>
+        const columns = document.querySelectorAll('.column');
+        setInterval(() => {
+            columns.forEach(col => {
+                const h = Math.floor(Math.random() * 100) + 20;
+                col.style.height = h + 'px';
+            });
+        }, 150);
+    </script>
+</body>
+</html>

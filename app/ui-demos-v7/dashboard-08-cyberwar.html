@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Cyberwar</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech&display=swap');
+
+        body {
+            background-color: #000510;
+            color: #00ffff;
+            font-family: 'Share Tech', sans-serif;
+            margin: 0;
+            height: 100vh;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .cyber-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr 300px;
+            grid-template-rows: 50px 1fr 1fr;
+            gap: 5px;
+            height: 100%;
+        }
+
+        .panel {
+            background: rgba(0, 20, 40, 0.8);
+            border: 1px solid #004488;
+            padding: 10px;
+            position: relative;
+        }
+
+        .header-panel {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: #001122;
+            border-bottom: 2px solid #00ffff;
+        }
+
+        .glitch-text {
+            font-size: 24px;
+            text-shadow: 2px 0 #ff00ff, -2px 0 #00ffff;
+        }
+
+        .attack-map {
+            grid-column: 2;
+            grid-row: 2 / span 2;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .node {
+            position: absolute;
+            width: 8px; height: 8px;
+            background: #fff;
+            box-shadow: 0 0 10px #fff;
+            border-radius: 50%;
+        }
+        
+        .connection-line {
+            position: absolute;
+            height: 1px;
+            background: rgba(0, 255, 255, 0.5);
+            transform-origin: left center;
+        }
+
+        .console-log {
+            font-family: monospace;
+            font-size: 12px;
+            color: #00ccff;
+            overflow: hidden;
+        }
+        
+        .log-line { margin-bottom: 5px; }
+        .log-warn { color: #ffaa00; }
+        .log-err { color: #ff3333; }
+
+        .stat-bar {
+            height: 15px;
+            background: #002244;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .stat-fill {
+            height: 100%;
+            background: #00ffff;
+            width: 45%;
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        .voice-cmd {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .waveform-digital {
+            height: 40px;
+            background: repeating-linear-gradient(
+                90deg,
+                #00ffff,
+                #00ffff 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            opacity: 0.5;
+            mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="cyber-grid">
+        <div class="panel header-panel">
+            <div class="glitch-text">CYBER_OPS_DASHBOARD</div>
+            <div style="font-size: 14px;">THREAT LEVEL: HIGH</div>
+        </div>
+
+        <div class="panel">
+            <div style="margin-bottom: 10px; font-weight: bold;">SYSTEM STATUS</div>
+            <div style="font-size: 12px; margin-bottom: 5px;">FIREWALL A</div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 80%"></div></div>
+            <div style="font-size: 12px; margin-bottom: 5px;">FIREWALL B</div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 40%; background: #ffaa00; box-shadow: 0 0 10px #ffaa00;"></div></div>
+            <div style="font-size: 12px; margin-bottom: 5px;">IDS SENSORS</div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 95%"></div></div>
+        </div>
+
+        <div class="panel attack-map">
+            <div style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); padding: 5px;">LIVE ATTACK VECTORS</div>
+            <div class="node" style="top: 20%; left: 30%;"></div>
+            <div class="node" style="top: 60%; left: 70%;"></div>
+            <div class="node" style="top: 40%; left: 50%; background: #ff0055; box-shadow: 0 0 15px #ff0055;"></div>
+            
+            <!-- Simple simulated lines -->
+            <div class="connection-line" style="top: 20%; left: 30%; width: 200px; transform: rotate(25deg);"></div>
+            <div class="connection-line" style="top: 40%; left: 50%; width: 150px; transform: rotate(45deg); background: rgba(255, 0, 85, 0.5);"></div>
+        </div>
+
+        <div class="panel">
+            <div style="margin-bottom: 10px; font-weight: bold;">TRAFFIC ANALYSIS</div>
+            <div class="console-log">
+                <div class="log-line">> PACKET_IN: 192.168.0.45 [OK]</div>
+                <div class="log-line log-warn">> PORT_SCAN DETECTED: 8080</div>
+                <div class="log-line log-err">> AUTH_FAIL: ROOT USER</div>
+                <div class="log-line">> TRACE_ROUTE: INITIATED</div>
+            </div>
+        </div>
+
+        <div class="panel voice-cmd">
+            <div style="font-weight: bold; margin-bottom: 10px;">VOICE COMMAND TERMINAL</div>
+            <div style="font-size: 14px; color: #888; margin-bottom: 10px;">> "Activate Countermeasures"</div>
+            <div class="waveform-digital"></div>
+            <button style="margin-top: 10px; background: transparent; border: 1px solid #00ffff; color: #00ffff; padding: 10px; cursor: pointer;">EXECUTE</button>
+        </div>
+        
+        <div class="panel">
+            <div style="margin-bottom: 10px; font-weight: bold;">BOTNET TRACKER</div>
+            <div style="font-size: 32px; font-weight: bold;">1,402</div>
+            <div style="font-size: 12px;">ACTIVE NODES</div>
+        </div>
+    </div>
+</body>
+</html>

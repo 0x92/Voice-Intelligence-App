@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Containment</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@700&display=swap');
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Oxanium', cursive;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-stripe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 20px;
+            background: repeating-linear-gradient(
+                -45deg,
+                #ffcc00,
+                #ffcc00 20px,
+                #000 20px,
+                #000 40px
+            );
+        }
+
+        .panel {
+            width: 800px;
+            height: 500px;
+            background: #111;
+            border: 2px solid #333;
+            display: grid;
+            grid-template-columns: 200px 1fr;
+        }
+
+        .sidebar {
+            background: #1a1a1a;
+            border-right: 2px solid #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .bio-symbol {
+            font-size: 80px;
+            color: #ff3333;
+            text-align: center;
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red { 0% { opacity: 0.8; } 50% { opacity: 1; text-shadow: 0 0 20px #ff0000; } 100% { opacity: 0.8; } }
+
+        .status-block {
+            background: #000;
+            border: 1px solid #333;
+            padding: 10px;
+            font-size: 12px;
+            color: #888;
+        }
+        .status-ok { color: #00ff00; }
+        .status-crit { color: #ff0000; }
+
+        .main {
+            padding: 40px;
+            position: relative;
+            background: radial-gradient(circle at center, #220000 0%, #000 80%);
+        }
+
+        h1 {
+            text-transform: uppercase;
+            font-size: 32px;
+            margin: 0 0 10px 0;
+            color: #fff;
+        }
+
+        .glass-overlay {
+            width: 100%;
+            height: 200px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            margin-top: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .glass-overlay::before {
+            content: 'AUDIO MONITORING ACTIVE';
+            position: absolute;
+            top: 10px; left: 10px;
+            font-size: 10px;
+            color: #ffcc00;
+        }
+
+        .waveform-spikes {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            height: 100px;
+        }
+        
+        .spike {
+            width: 5px;
+            background: #ff3333;
+            box-shadow: 0 0 10px #ff0000;
+            animation: spike-anim 0.2s infinite alternate;
+        }
+        
+        @keyframes spike-anim { from { height: 10px; } to { height: 80px; } }
+
+        .btn-lock {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            background: #ffcc00;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 0 10px #ffcc00;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="warning-stripe"></div>
+    <div class="warning-stripe" style="top: auto; bottom: 0;"></div>
+
+    <div class="panel">
+        <div class="sidebar">
+            <div class="bio-symbol">☣</div>
+            <div class="status-block">
+                SECTOR A: <span class="status-ok">SECURE</span><br>
+                SECTOR B: <span class="status-ok">SECURE</span><br>
+                LAB 4: <span class="status-crit">BREACH</span>
+            </div>
+            <div class="status-block">
+                O2 LEVEL: 94%<br>
+                PRESSURE: STABLE
+            </div>
+        </div>
+        
+        <div class="main">
+            <h1>Emergency Protocol</h1>
+            <p style="color: #aaa;">Authorized personnel only. Record incident report immediately.</p>
+
+            <div class="glass-overlay">
+                <div class="waveform-spikes">
+                    <div class="spike" style="height: 40px"></div>
+                    <div class="spike" style="height: 70px"></div>
+                    <div class="spike" style="height: 20px"></div>
+                    <div class="spike" style="height: 90px"></div>
+                    <div class="spike" style="height: 50px"></div>
+                    <div class="spike" style="height: 30px"></div>
+                </div>
+            </div>
+
+            <button class="btn-lock">INITIATE LOCKDOWN</button>
+        </div>
+    </div>
+</body>
+</html>

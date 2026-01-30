@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - RPG</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        body {
+            background-color: #202020;
+            color: #fff;
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            image-rendering: pixelated;
+        }
+
+        .game-screen {
+            width: 700px;
+            height: 500px;
+            background: #465586;
+            border: 4px solid #fff;
+            box-shadow: 0 0 0 4px #000;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            background-image: 
+                linear-gradient(transparent 90%, rgba(0,0,0,0.2) 90%),
+                linear-gradient(90deg, transparent 90%, rgba(0,0,0,0.2) 90%);
+            background-size: 20px 20px;
+        }
+
+        .character-sprite {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 64px;
+            height: 64px;
+            background: #ff5555;
+            box-shadow: 
+                10px 0 #ff5555, -10px 0 #ff5555,
+                0 -10px #ff5555, 0 10px #ff5555,
+                20px 0 #ff5555, -20px 0 #ff5555; 
+            /* Very basic pixel art placeholder via CSS box-shadow */
+        }
+
+        .dialog-box {
+            background: #0000a0; /* Classic RPG Blue */
+            border: 4px solid #fff;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 120px;
+            position: relative;
+        }
+
+        .dialog-box::after {
+            content: '▼';
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        .menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #fff;
+            color: #000;
+            border: 4px solid #000;
+            padding: 10px;
+        }
+
+        .menu-item {
+            cursor: pointer;
+            padding: 5px;
+        }
+        .menu-item:hover::before {
+            content: '► ';
+        }
+
+        .status-bar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border: 2px solid #fff;
+        }
+
+        .hp-bar {
+            width: 100px;
+            height: 10px;
+            background: #555;
+            margin-top: 5px;
+        }
+        .hp-fill {
+            width: 80%;
+            height: 100%;
+            background: #55ff55;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="game-screen">
+        <div class="status-bar">
+            PLAYER 1<br>
+            HP: <div class="hp-bar"><div class="hp-fill"></div></div>
+            MP: <div class="hp-bar"><div class="hp-fill" style="width: 100%; background: #5555ff;"></div></div>
+        </div>
+
+        <div class="menu">
+            <div class="menu-item">ITEM</div>
+            <div class="menu-item">MAGIC</div>
+            <div class="menu-item">RECORD</div>
+            <div class="menu-item">SAVE</div>
+        </div>
+
+        <div class="character-sprite"></div>
+
+        <div class="dialog-box">
+            <p style="line-height: 1.8; margin: 0;">
+                VOICE WIZARD:<br>
+                "I am listening to your command. Speak clearly to cast the spell of transcription!"
+            </p>
+        </div>
+    </div>
+</body>
+</html>

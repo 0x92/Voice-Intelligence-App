@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Safehouse</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Teko:wght@300;600&display=swap');
+
+        body {
+            background-color: #2c2724;
+            color: #dccbb8;
+            font-family: 'Teko', sans-serif;
+            margin: 0;
+            height: 100vh;
+            padding: 40px;
+            box-sizing: border-box;
+            background-image: repeating-linear-gradient(45deg, #332d2a 0, #332d2a 2px, #2c2724 2px, #2c2724 10px);
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            background: #463e39;
+            padding: 20px;
+            border-left: 5px solid #d4a373;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        h1 { margin: 0; font-size: 36px; text-transform: uppercase; color: #d4a373; }
+
+        .card {
+            background: #3a332f;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            border: 1px solid #4e443f;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            font-size: 24px;
+            color: #a9927d;
+            border-bottom: 1px solid #4e443f;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .inventory-list {
+            font-size: 20px;
+            flex: 1;
+        }
+        
+        .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #463e39;
+        }
+        .item:last-child { border-bottom: none; }
+
+        .stock-level {
+            font-weight: bold;
+        }
+        .low { color: #d66; }
+        .med { color: #da6; }
+        .good { color: #6d6; }
+
+        .input-zone {
+            grid-column: span 2;
+            background: #25201d;
+            border: 2px dashed #4e443f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .mic-icon-lg {
+            font-size: 48px;
+            color: #d4a373;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .mic-icon-lg:hover { transform: scale(1.1); }
+
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>Safehouse Inventory</h1>
+            <div style="font-size: 24px;">LOCATION: BUNKER 09</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Food & Water</div>
+            <div class="inventory-list">
+                <div class="item"><span>Canned Goods</span> <span class="stock-level med">45 Cans</span></div>
+                <div class="item"><span>Water (Gal)</span> <span class="stock-level good">120 Gal</span></div>
+                <div class="item"><span>MRE Packs</span> <span class="stock-level low">12 Packs</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Medical</div>
+            <div class="inventory-list">
+                <div class="item"><span>Medkits</span> <span class="stock-level good">8 Units</span></div>
+                <div class="item"><span>Antibiotics</span> <span class="stock-level low">3 Doses</span></div>
+                <div class="item"><span>Bandages</span> <span class="stock-level med">20 Rolls</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Defense</div>
+            <div class="inventory-list">
+                <div class="item"><span>Ammo (9mm)</span> <span class="stock-level med">250 Rds</span></div>
+                <div class="item"><span>Batteries</span> <span class="stock-level low">15 Units</span></div>
+                <div class="item"><span>Flares</span> <span class="stock-level good">10 Units</span></div>
+            </div>
+        </div>
+
+        <div class="input-zone">
+            <div class="mic-icon-lg">🎙️</div>
+            <div style="font-size: 24px; text-transform: uppercase;">Voice Logging Active</div>
+            <p style="color: #888; font-family: sans-serif; font-size: 14px;">"Speak to update inventory count or log new supply run..."</p>
+        </div>
+        
+        <div class="card">
+             <div class="card-header">Alerts</div>
+             <div style="color: #d66; font-size: 20px;">! Filter Replacement Needed</div>
+             <div style="color: #da6; font-size: 20px;">! Generator Maintenance</div>
+        </div>
+    </div>
+</body>
+</html>

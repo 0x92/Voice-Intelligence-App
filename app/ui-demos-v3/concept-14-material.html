@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Material 3</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+        :root {
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #EADDFF;
+            --md-sys-color-on-primary-container: #21005D;
+            --md-sys-color-surface: #FFFBFE;
+            --md-sys-color-on-surface: #1C1B1F;
+            --md-sys-color-surface-variant: #E7E0EC;
+            --md-sys-color-outline: #79747E;
+        }
+
+        body {
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-on-surface);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-shell {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: #fff;
+        }
+
+        .top-app-bar {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            background: var(--md-sys-color-surface);
+        }
+
+        .headline {
+            font-size: 22px;
+            margin-left: 20px;
+        }
+
+        .content {
+            padding: 16px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .card-filled {
+            background-color: var(--md-sys-color-surface-variant);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            color: var(--md-sys-color-on-surface);
+        }
+
+        .chip-group {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .chip {
+            border: 1px solid var(--md-sys-color-outline);
+            border-radius: 8px;
+            padding: 6px 16px;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .chip.active {
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
+            border: none;
+        }
+
+        .fab {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background-color: var(--md-sys-color-primary);
+            color: var(--md-sys-color-on-primary);
+            border-radius: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .fab:hover {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            transform: scale(1.05);
+        }
+
+        .bottom-nav {
+            height: 80px;
+            background-color: var(--md-sys-color-surface-variant);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 500;
+            color: #49454F;
+        }
+
+        .nav-icon {
+            width: 24px; height: 24px; margin-bottom: 4px; background: #49454F; opacity: 0.5; border-radius: 4px;
+        }
+
+        .nav-item.active { color: #1d192b; font-weight: bold; }
+        .nav-item.active .nav-icon { background: var(--md-sys-color-primary); opacity: 1; }
+
+    </style>
+</head>
+<body>
+    <div class="app-shell">
+        <div class="top-app-bar">
+            <div style="font-size: 24px;">☰</div>
+            <div class="headline">Recordings</div>
+        </div>
+
+        <div class="content">
+            <div class="chip-group">
+                <div class="chip active">All</div>
+                <div class="chip">Favorites</div>
+                <div class="chip">Shared</div>
+                <div class="chip">Archived</div>
+            </div>
+
+            <h3 style="margin-top: 20px;">Today</h3>
+            
+            <div class="card-filled">
+                <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Meeting Notes</div>
+                <div style="font-size: 14px; opacity: 0.7;">10:30 AM • 45 min</div>
+            </div>
+
+            <div class="card-filled">
+                <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">Quick Idea</div>
+                <div style="font-size: 14px; opacity: 0.7;">09:15 AM • 2 min</div>
+            </div>
+        </div>
+
+        <div class="fab">
+            <span>🎤</span>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon"></div>
+                <span>Home</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon"></div>
+                <span>Search</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon"></div>
+                <span>Settings</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

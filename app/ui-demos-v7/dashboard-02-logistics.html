@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Voice Intel - Logistics</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+        body {
+            background-color: #2b303b;
+            color: #d8dee9;
+            font-family: 'Roboto Condensed', sans-serif;
+            margin: 0;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 250px 1fr 300px;
+            grid-template-rows: 80px 1fr;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            background: #3b4252;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; font-size: 24px; }
+
+        .sidebar {
+            background: #3b4252;
+            border-radius: 4px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .nav-item {
+            padding: 15px;
+            background: #434c5e;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .nav-item.active { background: #88c0d0; color: #2e3440; }
+
+        .main-content {
+            background: #3b4252;
+            border-radius: 4px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .card {
+            background: #434c5e;
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #81a1c1;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: #2e3440;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .fill { height: 100%; background: #a3be8c; width: 60%; }
+        .fill.warn { background: #ebcb8b; width: 30%; }
+        .fill.crit { background: #bf616a; width: 10%; }
+
+        .log-panel {
+            background: #3b4252;
+            border-radius: 4px;
+            padding: 20px;
+        }
+
+        .log-entry {
+            font-family: monospace;
+            font-size: 12px;
+            border-bottom: 1px solid #4c566a;
+            padding: 8px 0;
+            color: #d8dee9;
+        }
+
+        .btn {
+            background: #5e81ac;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="header">
+            <h1>Supply Logistics /// Sector 7</h1>
+            <div style="margin-left: auto; font-size: 14px; color: #81a1c1;">
+                DAYS SINCE INCIDENT: 412
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="nav-item active">Inventory</div>
+            <div class="nav-item">Rationing</div>
+            <div class="nav-item">Personnel</div>
+            <div class="nav-item">Requests</div>
+        </div>
+
+        <div class="main-content">
+            <div class="card">
+                <div class="card-title">Water Reserves</div>
+                <div style="font-size: 32px; font-weight: bold;">4,200 L</div>
+                <div class="progress-bar"><div class="fill"></div></div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Ammunition</div>
+                <div style="font-size: 32px; font-weight: bold;">120 RDS</div>
+                <div class="progress-bar"><div class="fill crit"></div></div>
+            </div>
+
+            <div class="card" style="grid-column: span 2;">
+                <div class="card-title">Voice Requisition System</div>
+                <div style="background: #2e3440; height: 100px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #888;">
+                    [ CLICK TO RECORD REQUEST ]
+                </div>
+                <button class="btn">Submit Request</button>
+            </div>
+        </div>
+
+        <div class="log-panel">
+            <div class="card-title">Recent Activity</div>
+            <div class="log-entry">[08:00] Ration distribution complete.</div>
+            <div class="log-entry">[09:15] Patrol unit returned.</div>
+            <div class="log-entry">[10:30] Fuel shipment delayed.</div>
+            <div class="log-entry">[11:45] Voice log archived.</div>
+        </div>
+    </div>
+</body>
+</html>
