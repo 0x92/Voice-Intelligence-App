@@ -206,6 +206,11 @@ main.matrix {
   gap: 10px;
   padding: 6px 8px;
   border: 1px solid var(--panel-border);
+  flex-wrap: wrap;
+}
+
+.row span {
+  flex: 0 0 auto;
 }
 
 select {
@@ -214,6 +219,12 @@ select {
   border: 1px solid var(--panel-border);
   padding: 4px 6px;
   font-family: inherit;
+  max-width: 65%;
+  min-width: 180px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  flex: 1 1 60%;
 }
 
 .oscilloscope {
@@ -378,11 +389,13 @@ select {
   margin-bottom: 10px;
   border: 1px solid var(--panel-border);
   padding: 6px 8px;
+  overflow: hidden;
 }
 
 .mini-wave canvas {
-  width: 160px;
+  width: 140px;
   height: 32px;
+  max-width: 100%;
 }
 
 .error-bar {

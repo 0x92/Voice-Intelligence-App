@@ -31,8 +31,8 @@ const trayIconPng =
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 780,
+    width: 1360,
+    height: 900,
     show: false,
     backgroundColor: "#0b0f14",
     webPreferences: {

@@ -50,6 +50,7 @@ https://github.com/ggerganov/whisper.cpp/releases
 
 **Modell (multilingual, z. B. `ggml-base.bin`):**  
 https://huggingface.co/ggerganov/whisper.cpp
+Direktlink: https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-base.bin
 
 Empfohlene Ordnerstruktur:
 ```
