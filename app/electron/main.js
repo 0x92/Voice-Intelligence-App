@@ -39,6 +39,7 @@ const createWindow = () => {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
+      backgroundThrottling: false,
     },
   });
 
@@ -63,6 +64,8 @@ const createWindow = () => {
     const indexPath = path.join(app.getAppPath(), "out", "index.html");
     mainWindow.loadFile(indexPath);
   }
+
+  mainWindow.webContents.setBackgroundThrottling(false);
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url.startsWith("http")) {
