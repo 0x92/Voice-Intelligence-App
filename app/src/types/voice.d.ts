@@ -7,7 +7,11 @@ declare global {
         buffer: Uint8Array;
         mimeType: string;
       }) => Promise<{ text: string }>;
-      enrich: (payload: { text: string; preset: string }) => Promise<{
+      enrich: (payload: {
+        text: string;
+        preset: string;
+        language?: "de" | "en";
+      }) => Promise<{
         output: string;
         mode?: string;
         warning?: string;

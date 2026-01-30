@@ -9,6 +9,11 @@ const PRESET_INSTRUCTIONS = {
     "Rewrite as a polished professional email with a subject line and short closing.",
 };
 
+const LANGUAGE_OUTPUT = {
+  de: "German",
+  en: "English",
+};
+
 let clientPromise = null;
 
 const getClient = async () => {
@@ -24,7 +29,7 @@ const getClient = async () => {
   return clientPromise;
 };
 
-const enrichText = async ({ text, preset }) => {
+const enrichText = async ({ text, preset, language = "de" }) => {
   if (!text) {
     throw new Error("Missing text to enrich");
   }
@@ -32,6 +37,7 @@ const enrichText = async ({ text, preset }) => {
   const client = await getClient();
   const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
   const instruction = PRESET_INSTRUCTIONS[preset] || PRESET_INSTRUCTIONS.notes;
+  const outputLanguage = LANGUAGE_OUTPUT[language] || LANGUAGE_OUTPUT.de;
 
   const completion = await client.chat.completions.create({
     model,
@@ -39,10 +45,12 @@ const enrichText = async ({ text, preset }) => {
     messages: [
       {
         role: "system",
-        content:
-          "You format transcripts into clean, usable outputs. Respond in Markdown with no preamble.",
+        content: `You format transcripts into clean, usable outputs. Respond in Markdown with no preamble. Output language: ${outputLanguage}.`,
       },
-      { role: "user", content: `${instruction}\n\nTranscript:\n${text}` },
+      {
+        role: "user",
+        content: `${instruction}\n\nOutput language: ${outputLanguage}.\n\nTranscript:\n${text}`,
+      },
     ],
   });
 

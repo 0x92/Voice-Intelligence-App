@@ -17,7 +17,7 @@ const plex = IBM_Plex_Sans({
 export const metadata: Metadata = {
   title: "Voice Intelligence",
   description:
-    "Desktop app that captures voice, transcribes locally, and enriches with AI.",
+    "Desktop-App, die Sprache aufnimmt, lokal transkribiert und mit KI anreichert.",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sora.variable} ${plex.variable}`}>
+    <html lang="de" className={`${sora.variable} ${plex.variable}`}>
       <body>{children}</body>
     </html>
   );

@@ -5,13 +5,205 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 type Status = "idle" | "recording" | "transcribing" | "enriching" | "error";
+type Language = "de" | "en";
 
 const PRESETS = [
-  { id: "notes", label: "Structured Notes" },
-  { id: "summary", label: "Executive Summary" },
-  { id: "todos", label: "Action Items" },
-  { id: "email", label: "Polished Email" },
-];
+  {
+    id: "notes",
+    labels: {
+      de: "Strukturierte Notizen",
+      en: "Structured Notes",
+    },
+  },
+  {
+    id: "summary",
+    labels: {
+      de: "Management-Zusammenfassung",
+      en: "Executive Summary",
+    },
+  },
+  {
+    id: "todos",
+    labels: {
+      de: "Aktionspunkte",
+      en: "Action Items",
+    },
+  },
+  {
+    id: "email",
+    labels: {
+      de: "Ueberarbeitete E-Mail",
+      en: "Polished Email",
+    },
+  },
+] as const;
+
+type PresetId = (typeof PRESETS)[number]["id"];
+
+const UI_TEXT = {
+  de: {
+    headers: {
+      connection: "VERBINDUNG_LISTE",
+      capture: "AUFNAHME_UND_TRANSKRIPT",
+      enrichment: "KI_ANREICHERUNG",
+      systemLog: "SYSTEM_PROTOKOLL",
+      codeFragments: "CODE_FRAGMENTE",
+      localMap: "LOKALE_KARTE",
+    },
+    console: {
+      title: "OPERATOR KONSOLE",
+      subtitle: "Voice Intelligence - Lokales STT - OpenAI",
+    },
+    language: {
+      label: "SPRACHE",
+    },
+    errors: {
+      label: "Fehler",
+    },
+    status: {
+      idle: "Bereit",
+      recording: "Aufnahme laeuft",
+      transcribing: "Lokal transkribiert...",
+      enriching: "KI-Anreicherung...",
+      error: "Aktion erforderlich",
+    },
+    connection: {
+      voiceEngine: "Sprach-Engine",
+      recording: "AUFNAHME",
+      ready: "BEREIT",
+      device: "Geraet",
+      model: "Modell",
+      hotkeys: "Tastenkurzel",
+      appToggle: "App Umschalten",
+      record: "Aufnahme",
+    },
+    microphone: {
+      label: "MIKROFON",
+      noDevices: "Keine Geraete",
+      systemDefault: "Systemstandard",
+      selectedDevice: "Ausgewaehltes Geraet",
+      fallbackDevice: "Mikrofon",
+    },
+    oscilloscope: {
+      label: "AUDIO_EINGANG: CH_01",
+    },
+    controls: {
+      record: "AUFNEHMEN",
+      stop: "STOPP",
+      copyTranscript: "Transkript kopieren",
+      clear: "Zuruecksetzen",
+      copyOutput: "Ausgabe kopieren",
+      rerun: "Neu ausfuehren",
+    },
+    placeholders: {
+      transcript: "Noch kein Transkript. Aufnahme starten, um zu erfassen.",
+      enrichment: "Noch keine Ausgabe. Sprich, um eine Anreicherung zu erzeugen.",
+    },
+    toggles: {
+      rendered: "Gerendert",
+      markdown: "Markdown",
+    },
+    system: {
+      status: "Status",
+      stream: "DATENSTROM",
+      logLines: [
+        "[14:02] Initialisiere Sprach-Engine...",
+        "[14:03] Lokales Modell bereit.",
+        "[14:03] OpenAI-Kanal bereit.",
+        "[14:04] Tastenkurzel registriert.",
+      ],
+    },
+    localMap: {
+      audio: "Audio",
+      localDevice: "Lokales Geraet",
+      stt: "STT",
+      llm: "LLM",
+      output: "Ausgabe",
+      outputFormat: "Markdown",
+    },
+  },
+  en: {
+    headers: {
+      connection: "CONNECTION_LIST",
+      capture: "CAPTURE_AND_TRANSCRIPT",
+      enrichment: "AI_ENRICHMENT",
+      systemLog: "SYSTEM_LOG",
+      codeFragments: "CODE_FRAGMENTS",
+      localMap: "LOCAL_MAP",
+    },
+    console: {
+      title: "OPERATOR CONSOLE",
+      subtitle: "Voice Intelligence - Local STT - OpenAI",
+    },
+    language: {
+      label: "LANGUAGE",
+    },
+    errors: {
+      label: "Error",
+    },
+    status: {
+      idle: "Ready",
+      recording: "Recording",
+      transcribing: "Transcribing locally...",
+      enriching: "Enriching with AI...",
+      error: "Action required",
+    },
+    connection: {
+      voiceEngine: "Voice Engine",
+      recording: "RECORDING",
+      ready: "READY",
+      device: "Device",
+      model: "Model",
+      hotkeys: "Hotkeys",
+      appToggle: "App Toggle",
+      record: "Record",
+    },
+    microphone: {
+      label: "MICROPHONE",
+      noDevices: "No devices",
+      systemDefault: "System default",
+      selectedDevice: "Selected device",
+      fallbackDevice: "Microphone",
+    },
+    oscilloscope: {
+      label: "AUDIO_IN: CH_01",
+    },
+    controls: {
+      record: "RECORD",
+      stop: "STOP",
+      copyTranscript: "Copy transcript",
+      clear: "Clear",
+      copyOutput: "Copy output",
+      rerun: "Re-run",
+    },
+    placeholders: {
+      transcript: "No transcript yet. Start recording to capture.",
+      enrichment: "No output yet. Speak to generate enrichment.",
+    },
+    toggles: {
+      rendered: "Rendered",
+      markdown: "Markdown",
+    },
+    system: {
+      status: "Status",
+      stream: "STREAM",
+      logLines: [
+        "[14:02] Initializing voice engine...",
+        "[14:03] Local model ready.",
+        "[14:03] OpenAI channel ready.",
+        "[14:04] Hotkeys registered.",
+      ],
+    },
+    localMap: {
+      audio: "Audio",
+      localDevice: "Local device",
+      stt: "STT",
+      llm: "LLM",
+      output: "Output",
+      outputFormat: "Markdown",
+    },
+  },
+} as const;
 
 const pickMimeType = () => {
   const options = [
@@ -54,13 +246,17 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [transcript, setTranscript] = useState("");
   const [enriched, setEnriched] = useState("");
-  const [preset, setPreset] = useState(PRESETS[0].id);
+  const [preset, setPreset] = useState<PresetId>(PRESETS[0].id);
+  const [language, setLanguage] = useState<Language>("de");
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>("default");
   const [showMarkdown, setShowMarkdown] = useState(false);
 
+  const text = UI_TEXT[language];
+
   const selectedDeviceRef = useRef<string>("default");
   const toggleRef = useRef<() => void>(() => {});
+  const languageRef = useRef<Language>("de");
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -75,20 +271,7 @@ export default function Home() {
   const rafRef = useRef<number | null>(null);
   const lastLevelSentRef = useRef<number>(0);
 
-  const statusLabel = useMemo(() => {
-    switch (status) {
-      case "recording":
-        return "Recording";
-      case "transcribing":
-        return "Transcribing locally...";
-      case "enriching":
-        return "Enriching with AI...";
-      case "error":
-        return "Action required";
-      default:
-        return "Ready";
-    }
-  }, [status]);
+  const statusLabel = useMemo(() => text.status[status], [status, text]);
 
   const loadDevices = async () => {
     try {
@@ -111,11 +294,21 @@ export default function Home() {
       selectedDeviceRef.current = saved;
       setSelectedDeviceId(saved);
     }
+    const savedLanguage = window.localStorage.getItem("voice:language");
+    if (savedLanguage === "de" || savedLanguage === "en") {
+      setLanguage(savedLanguage);
+    }
     loadDevices();
     const handler = () => loadDevices();
     navigator.mediaDevices.addEventListener("devicechange", handler);
     return () => navigator.mediaDevices.removeEventListener("devicechange", handler);
   }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("voice:language", language);
+    document.documentElement.lang = language;
+    languageRef.current = language;
+  }, [language]);
 
   useEffect(() => {
     selectedDeviceRef.current = selectedDeviceId;
@@ -255,6 +448,7 @@ export default function Home() {
             const enrichment = await window.voice.enrich({
               text: nextTranscript,
               preset,
+              language: languageRef.current,
             });
             setEnriched(enrichment?.output ?? "");
           } else {
@@ -315,7 +509,11 @@ export default function Home() {
     if (!transcript || !window.voice) return;
     setStatus("enriching");
     try {
-      const enrichment = await window.voice.enrich({ text: transcript, preset });
+      const enrichment = await window.voice.enrich({
+        text: transcript,
+        preset,
+        language,
+      });
       setEnriched(enrichment?.output ?? "");
       setStatus("idle");
     } catch (err) {
@@ -338,18 +536,18 @@ export default function Home() {
       {
         deviceId: selectedDeviceId,
         kind: "audioinput",
-        label: "Selected device",
+        label: text.microphone.selectedDevice,
         groupId: "",
         toJSON: () => ({}),
       } as MediaDeviceInfo,
     ];
-  }, [devices, selectedDeviceId]);
+  }, [devices, selectedDeviceId, text.microphone.selectedDevice]);
 
   const selectedDeviceLabel = useMemo(() => {
-    if (selectedDeviceId === "default") return "System default";
+    if (selectedDeviceId === "default") return text.microphone.systemDefault;
     const match = devices.find((device) => device.deviceId === selectedDeviceId);
-    return match?.label || "Selected device";
-  }, [devices, selectedDeviceId]);
+    return match?.label || text.microphone.selectedDevice;
+  }, [devices, selectedDeviceId, text.microphone.selectedDevice, text.microphone.systemDefault]);
 
   useEffect(() => {
     if (!window.voice?.setRecordingState) return;
@@ -367,21 +565,23 @@ export default function Home() {
     <main className="matrix">
       <div className="screen-grid">
         <section className="panel">
-          <div className="header">CONNECTION_LIST</div>
+          <div className="header">{text.headers.connection}</div>
           <div className="data-stream">
-            &gt; Voice Engine [{status === "recording" ? "RECORDING" : "READY"}]
+            &gt; {text.connection.voiceEngine} [
+            {status === "recording" ? text.connection.recording : text.connection.ready}]
             <br />
-            &gt; Device: {selectedDeviceLabel}
+            &gt; {text.connection.device}: {selectedDeviceLabel}
             <br />
-            &gt; Model: {process.env.NEXT_PUBLIC_MODEL_NAME || "ggml-base.bin"}
+            &gt; {text.connection.model}:{" "}
+            {process.env.NEXT_PUBLIC_MODEL_NAME || "ggml-base.bin"}
             <br />
             ------------------
             <br />
-            Hotkeys:
+            {text.connection.hotkeys}:
             <br />
-            App Toggle: Ctrl/Cmd + Shift + Space
+            {text.connection.appToggle}: Ctrl/Cmd + Shift + Space
             <br />
-            Record: Ctrl/Cmd + Shift + R
+            {text.connection.record}: Ctrl/Cmd + Shift + R
           </div>
         </section>
 
@@ -390,35 +590,52 @@ export default function Home() {
             <div className="brand-line">
               <div className="brand-mark">VI</div>
               <div>
-                <div className="title">OPERATOR CONSOLE</div>
-                <div className="subtitle">Voice Intelligence · Local STT · OpenAI</div>
+                <div className="title">{text.console.title}</div>
+                <div className="subtitle">{text.console.subtitle}</div>
               </div>
             </div>
-            <div className={`status-chip ${status === "recording" ? "live" : ""}`}>
-              <span className="status-dot" />
-              {statusLabel}
+            <div className="console-actions">
+              <div className="language-toggle">
+                <span>{text.language.label}</span>
+                <button
+                  className={language === "de" ? "active" : ""}
+                  onClick={() => setLanguage("de")}
+                >
+                  DE
+                </button>
+                <button
+                  className={language === "en" ? "active" : ""}
+                  onClick={() => setLanguage("en")}
+                >
+                  EN
+                </button>
+              </div>
+              <div className={`status-chip ${status === "recording" ? "live" : ""}`}>
+                <span className="status-dot" />
+                {statusLabel}
+              </div>
             </div>
           </div>
 
           <div className="console-grid">
             <section className="panel inner">
-              <div className="header">CAPTURE_AND_TRANSCRIPT</div>
+              <div className="header">{text.headers.capture}</div>
               <div className="row">
-                <span>MICROPHONE</span>
+                <span>{text.microphone.label}</span>
                 <select
                   id="micSelect"
                   value={selectedDeviceId}
                   onChange={(event) => setSelectedDeviceId(event.target.value)}
                 >
                   {deviceOptions.length === 0 && (
-                    <option value="default">No devices</option>
+                    <option value="default">{text.microphone.noDevices}</option>
                   )}
                   {deviceOptions.length > 0 && (
-                    <option value="default">System default</option>
+                    <option value="default">{text.microphone.systemDefault}</option>
                   )}
                   {deviceOptions.map((device, index) => (
                     <option key={device.deviceId} value={device.deviceId}>
-                      {device.label || `Microphone ${index + 1}`}
+                      {device.label || `${text.microphone.fallbackDevice} ${index + 1}`}
                     </option>
                   ))}
                 </select>
@@ -426,22 +643,24 @@ export default function Home() {
 
               <div className="oscilloscope">
                 <canvas ref={canvasMainRef} width={600} height={120} />
-                <div className="oscillo-label">AUDIO_IN: CH_01</div>
+                <div className="oscillo-label">{text.oscilloscope.label}</div>
               </div>
 
               <button
                 className={`record-btn ${status === "recording" ? "active" : ""}`}
                 onClick={toggleRecording}
               >
-                {status === "recording" ? "STOP" : "RECORD"}
+                {status === "recording" ? text.controls.stop : text.controls.record}
               </button>
 
               <div className="block">
-                {transcript || "No transcript yet. Start recording to capture."}
+                {transcript || text.placeholders.transcript}
               </div>
 
               <div className="actions">
-                <button onClick={() => copyText(transcript)}>Copy transcript</button>
+                <button onClick={() => copyText(transcript)}>
+                  {text.controls.copyTranscript}
+                </button>
                 <button
                   onClick={() => {
                     setTranscript("");
@@ -450,13 +669,13 @@ export default function Home() {
                     setStatus("idle");
                   }}
                 >
-                  Clear
+                  {text.controls.clear}
                 </button>
               </div>
             </section>
 
             <section className="panel inner">
-              <div className="header">AI_ENRICHMENT</div>
+              <div className="header">{text.headers.enrichment}</div>
               <div className="preset-grid">
                 {PRESETS.map((item) => (
                   <button
@@ -464,7 +683,7 @@ export default function Home() {
                     className={`preset ${preset === item.id ? "active" : ""}`}
                     onClick={() => setPreset(item.id)}
                   >
-                    {item.label}
+                    {item.labels[language]}
                   </button>
                 ))}
               </div>
@@ -474,59 +693,60 @@ export default function Home() {
                   className={!showMarkdown ? "active" : ""}
                   onClick={() => setShowMarkdown(false)}
                 >
-                  Rendered
+                  {text.toggles.rendered}
                 </button>
                 <button
                   className={showMarkdown ? "active" : ""}
                   onClick={() => setShowMarkdown(true)}
                 >
-                  Markdown
+                  {text.toggles.markdown}
                 </button>
               </div>
 
               <div className="block markdown">
                 {showMarkdown ? (
                   <pre className="markdown-raw">
-                    {enriched || "No output yet. Speak to generate enrichment."}
+                    {enriched || text.placeholders.enrichment}
                   </pre>
                 ) : (
                   <ReactMarkdown remarkPlugins={[remarkGfm]} className="markdown-body">
-                    {enriched || "No output yet. Speak to generate enrichment."}
+                    {enriched || text.placeholders.enrichment}
                   </ReactMarkdown>
                 )}
               </div>
 
               <div className="actions">
-                <button onClick={() => copyText(enriched)}>Copy output</button>
-                <button onClick={rerunEnrichment}>Re-run</button>
+                <button onClick={() => copyText(enriched)}>
+                  {text.controls.copyOutput}
+                </button>
+                <button onClick={rerunEnrichment}>{text.controls.rerun}</button>
               </div>
             </section>
           </div>
         </section>
 
         <section className="panel">
-          <div className="header">SYSTEM_LOG</div>
+          <div className="header">{text.headers.systemLog}</div>
           <div className="log-line">
             <span className={`status-dot ${status === "recording" ? "live" : ""}`} />
-            Status: {statusLabel}
+            {text.system.status}: {statusLabel}
           </div>
           <div className="mini-wave">
-            <span>STREAM</span>
+            <span>{text.system.stream}</span>
             <canvas ref={canvasMiniRef} width={160} height={32} />
           </div>
           <div className="data-stream">
-            [14:02] Initializing voice engine...
-            <br />
-            [14:03] Local model ready.
-            <br />
-            [14:03] OpenAI channel ready.
-            <br />
-            [14:04] Hotkeys registered.
+            {text.system.logLines.map((line, index) => (
+              <span key={`${line}-${index}`}>
+                {line}
+                {index < text.system.logLines.length - 1 && <br />}
+              </span>
+            ))}
           </div>
         </section>
 
         <section className="panel">
-          <div className="header">CODE_FRAGMENTS</div>
+          <div className="header">{text.headers.codeFragments}</div>
           <div className="data-stream small">
             0x4F 0x9A 0x12 0xBB
             <br />
@@ -541,20 +761,24 @@ export default function Home() {
         </section>
 
         <section className="panel">
-          <div className="header">LOCAL_MAP</div>
+          <div className="header">{text.headers.localMap}</div>
           <div className="data-stream">
-            Audio: Local device
+            {text.localMap.audio}: {text.localMap.localDevice}
             <br />
-            STT: whisper.cpp
+            {text.localMap.stt}: whisper.cpp
             <br />
-            LLM: {process.env.NEXT_PUBLIC_LLM_NAME || "OpenAI"}
+            {text.localMap.llm}: {process.env.NEXT_PUBLIC_LLM_NAME || "OpenAI"}
             <br />
-            Output: Markdown
+            {text.localMap.output}: {text.localMap.outputFormat}
           </div>
         </section>
       </div>
 
-      {error && <div className="error-bar">Error: {error}</div>}
+      {error && (
+        <div className="error-bar">
+          {text.errors.label}: {error}
+        </div>
+      )}
     </main>
   );
 }
