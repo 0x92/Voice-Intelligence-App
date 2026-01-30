@@ -5,4 +5,5 @@ contextBridge.exposeInMainWorld("voice", {
   enrich: (payload) => ipcRenderer.invoke("voice:enrich", payload),
   onToggleRecord: (handler) => ipcRenderer.on("voice:toggle-record", handler),
   setRecordingState: (payload) => ipcRenderer.send("voice:recording-state", payload),
+  setRecordingLevel: (payload) => ipcRenderer.send("voice:recording-level", payload),
 });

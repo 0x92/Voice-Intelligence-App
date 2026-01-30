@@ -122,6 +122,10 @@ const createIndicatorWindow = () => {
           justify-content: space-between;
           gap: 10px;
         }
+        .wave {
+          width: 140px;
+          height: 24px;
+        }
         .dot {
           width: 10px;
           height: 10px;
@@ -153,13 +157,19 @@ const createIndicatorWindow = () => {
           </div>
           <span class="time" id="time">00:00</span>
         </div>
-        <div class="meta" id="device">Microphone: System default</div>
+        <div class="row">
+          <div class="meta" id="device">Microphone: System default</div>
+          <canvas class="wave" id="wave" width="140" height="24"></canvas>
+        </div>
       </div>
       <script>
         const { ipcRenderer } = require("electron");
         let startedAt = Date.now();
+        const levels = Array.from({ length: 18 }, () => 0);
         const timeEl = document.getElementById("time");
         const deviceEl = document.getElementById("device");
+        const wave = document.getElementById("wave");
+        const wctx = wave.getContext("2d");
         const tick = () => {
           const diff = Math.floor((Date.now() - startedAt) / 1000);
           const min = String(Math.floor(diff / 60)).padStart(2, "0");
@@ -167,6 +177,19 @@ const createIndicatorWindow = () => {
           timeEl.textContent = min + ":" + sec;
         };
         setInterval(tick, 1000);
+        const drawWave = () => {
+          wctx.clearRect(0, 0, wave.width, wave.height);
+          const barWidth = 6;
+          const gap = 2;
+          levels.forEach((level, i) => {
+            const height = 4 + level * 18;
+            const x = i * (barWidth + gap);
+            const y = (wave.height - height) / 2;
+            wctx.fillStyle = "rgba(239, 68, 68, 0.8)";
+            wctx.fillRect(x, y, barWidth, height);
+          });
+        };
+        drawWave();
         ipcRenderer.on("indicator:update", (_event, payload) => {
           if (payload?.startedAt) {
             startedAt = payload.startedAt;
@@ -174,6 +197,12 @@ const createIndicatorWindow = () => {
           if (payload?.deviceLabel) {
             deviceEl.textContent = "Microphone: " + payload.deviceLabel;
           }
+        });
+        ipcRenderer.on("indicator:level", (_event, payload) => {
+          const next = Math.max(0, Math.min(1, payload?.level ?? 0));
+          levels.push(next);
+          while (levels.length > 18) levels.shift();
+          drawWave();
         });
       </script>
     </body>
@@ -196,6 +225,7 @@ const showIndicator = (deviceLabel) => {
     startedAt: Date.now(),
     deviceLabel: deviceLabel || "System default",
   });
+  win.webContents.send("indicator:level", { level: 0 });
 };
 
 const hideIndicator = () => {
@@ -311,5 +341,11 @@ ipcMain.on("voice:recording-state", (_event, payload) => {
   }
   if (tray) {
     tray.setContextMenu(buildTrayMenu());
+  }
+});
+
+ipcMain.on("voice:recording-level", (_event, payload) => {
+  if (indicatorWindow && isRecording) {
+    indicatorWindow.webContents.send("indicator:level", payload);
   }
 });

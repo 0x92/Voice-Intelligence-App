@@ -34,7 +34,9 @@ export default function Home() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const dataArrayRef = useRef<Uint8Array | null>(null);
+  const freqArrayRef = useRef<Uint8Array | null>(null);
   const rafRef = useRef<number | null>(null);
+  const lastLevelSentRef = useRef<number>(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -183,19 +185,24 @@ export default function Home() {
     if (!AudioContextCtor) return;
     const audioContext = new AudioContextCtor();
     const analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
+    analyser.fftSize = 1024;
+    analyser.smoothingTimeConstant = 0.82;
     const source = audioContext.createMediaStreamSource(stream);
     source.connect(analyser);
 
     audioContextRef.current = audioContext;
     analyserRef.current = analyser;
     dataArrayRef.current = new Uint8Array(analyser.fftSize);
+    freqArrayRef.current = new Uint8Array(analyser.frequencyBinCount);
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     const draw = () => {
       if (!analyserRef.current || !dataArrayRef.current) return;
+      if (audioContextRef.current?.state === "suspended") {
+        audioContextRef.current.resume().catch(() => {});
+      }
       const data = dataArrayRef.current;
       analyserRef.current.getByteTimeDomainData(data);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -216,6 +223,22 @@ export default function Home() {
       }
       ctx.lineTo(canvas.width, canvas.height / 2);
       ctx.stroke();
+      const now = Date.now();
+      if (now - lastLevelSentRef.current > 80 && window.voice?.setRecordingLevel) {
+        const freq = freqArrayRef.current;
+        if (freq) {
+          analyserRef.current.getByteFrequencyData(freq);
+          let sum = 0;
+          const samples = Math.min(64, freq.length);
+          for (let i = 0; i < samples; i += 1) {
+            sum += freq[i];
+          }
+          const avg = sum / samples;
+          const level = Math.min(1, avg / 160);
+          window.voice.setRecordingLevel({ level });
+        }
+        lastLevelSentRef.current = now;
+      }
       rafRef.current = requestAnimationFrame(draw);
     };
 
@@ -240,6 +263,9 @@ export default function Home() {
     if (canvas) {
       const ctx = canvas.getContext("2d");
       ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    if (window.voice?.setRecordingLevel) {
+      window.voice.setRecordingLevel({ level: 0 });
     }
   };
 

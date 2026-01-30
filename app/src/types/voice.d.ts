@@ -17,6 +17,7 @@ declare global {
         active: boolean;
         deviceLabel?: string;
       }) => void;
+      setRecordingLevel: (payload: { level: number }) => void;
     };
   }
 }
