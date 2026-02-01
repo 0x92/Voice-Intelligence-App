@@ -1,6 +1,6 @@
 # Voice Intelligence App (Electron + Next.js)
 
-Eine Desktop‑App für schnelle Spracheingaben: lokal transkribieren, mit OpenAI strukturieren, sofort nutzbar.  
+Eine Desktop‑App für schnelle Spracheingaben: lokal transkribieren, mit OpenAI oder einem lokalen Ollama LLM strukturieren, sofort nutzbar.  
 Optimiert für Fokus‑Workflows (Hotkeys, Tray‑Modus, Recording‑Indicator).
 
 <img width="2749" height="1489" alt="image" src="https://github.com/user-attachments/assets/4ec65039-4e43-4f1a-aa5a-de828ac18491" />
