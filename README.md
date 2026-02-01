@@ -4,7 +4,7 @@ Eine Desktop‑App für schnelle Spracheingaben: lokal transkribieren, mit OpenA
 Optimiert für Fokus‑Workflows (Hotkeys, Tray‑Modus, Recording‑Indicator).
 
 ---
-## Executive Summary (für CTO)
+## Executive Summary
 - **Ziel:** Spracheingaben in produktive, strukturierte Outputs verwandeln (Notizen, Summary, Tasks).
 - **Kernvorteile:** Lokale Transkription (Whisper.cpp), minimale Latenz, keine Audio‑Cloud; nur Text geht an OpenAI.
 - **Deployment:** Electron Desktop, keine Server‑Infrastruktur nötig.
