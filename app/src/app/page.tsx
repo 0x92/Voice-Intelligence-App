@@ -105,6 +105,9 @@ const UI_TEXT = {
       transcript: "Noch kein Transkript. Aufnahme starten, um zu erfassen.",
       enrichment: "Noch keine Ausgabe. Sprich, um eine Anreicherung zu erzeugen.",
     },
+    enrichment: {
+      working: "KI arbeitet...",
+    },
     transcriptStats: {
       words: "Woerter",
       readTime: "Lesedauer",
@@ -198,6 +201,9 @@ const UI_TEXT = {
     placeholders: {
       transcript: "No transcript yet. Start recording to capture.",
       enrichment: "No output yet. Speak to generate enrichment.",
+    },
+    enrichment: {
+      working: "AI working...",
     },
     transcriptStats: {
       words: "Words",
@@ -775,6 +781,14 @@ export default function Home() {
 
             <section className="panel inner">
               <div className="header">{text.headers.enrichment}</div>
+              {status === "enriching" && (
+                <div className="async-indicator" aria-live="polite">
+                  <span className="async-dot" />
+                  <span className="async-dot" />
+                  <span className="async-dot" />
+                  <span>{text.enrichment.working}</span>
+                </div>
+              )}
               <div className="preset-grid">
                 {PRESETS.map((item) => (
                   <button

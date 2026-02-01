@@ -336,6 +336,44 @@ select {
   gap: 6px;
 }
 
+.async-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.async-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bright);
+  box-shadow: 0 0 6px rgba(0, 255, 122, 0.5);
+  animation: asyncPulse 1.2s infinite ease-in-out;
+}
+
+.async-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.async-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes asyncPulse {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
 .preset {
   background: transparent;
   border: 1px solid var(--panel-border);
