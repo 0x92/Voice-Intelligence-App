@@ -36,6 +36,14 @@ Global Hotkeys, Tray, IPC, lokale Services.
 OpenAI Chat Completion → strukturierte Ausgabe.
 
 ---
+## Design-Entscheidungen
+- Lokale STT mit whisper.cpp fuer geringe Latenz und Audio-Privacy.
+- Audio bleibt lokal, nur Text geht an OpenAI.
+- Electron + Next.js fuer schnelle UI-Iteration und Desktop-Hotkeys.
+- Hotkey + Tray fuer fokusierte Workflows ohne Kontextwechsel.
+- Markdown-Output fuer direkte Weiterverarbeitung.
+
+---
 ## Setup (Developer)
 
 ### 1) Install
@@ -44,22 +52,40 @@ cd app
 npm install
 ```
 
-### 2) Whisper.cpp Binary + Modell
+### 2) Whisper.cpp + Modell (Script)
+Windows (PowerShell):
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/install-whisper.ps1
+```
+
+Linux (bash):
+```bash
+bash scripts/install-whisper.sh
+```
+
+Optionale Overrides:
+```bash
+WHISPER_CPP_URL=... WHISPER_MODEL_URL=... bash scripts/install-whisper.sh
+```
+
+Die Scripts legen Dateien in `app/whisper/` und `app/models/ggml-base.bin` ab.
+
+### 3) Whisper.cpp Binary + Modell (manuell)
 **Binary (Windows):**  
 https://github.com/ggerganov/whisper.cpp/releases
 
-**Modell (multilingual, z. B. `ggml-base.bin`):**  
+**Modell (multilingual, z.B. `ggml-base.bin`):**  
 https://huggingface.co/ggerganov/whisper.cpp
 Direktlink: https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-base.bin
 
 Empfohlene Ordnerstruktur:
 ```
 app/
-  whisper/   -> enthält main.exe oder whisper-cli.exe
-  models/    -> enthält ggml-base.bin
+  whisper/   -> enthaelt main.exe oder whisper-cli.exe
+  models/    -> enthaelt ggml-base.bin
 ```
 
-### 3) `.env` konfigurieren
+### 4) `.env` konfigurieren
 ```env
 WHISPER_CPP_PATH=D:/Entwicklung/Voice Intelligence App Challenge/app/whisper/whisper-cli.exe
 WHISPER_MODEL_PATH=D:/Entwicklung/Voice Intelligence App Challenge/app/models/ggml-base.bin
@@ -69,17 +95,21 @@ OPENAI_MODEL=gpt-4o-mini
 WHISPER_CPP_ARGS=--language de
 ```
 
-### 4) Dev starten
+Linux Beispiel:
+```env
+WHISPER_CPP_PATH=/home/<user>/Voice Intelligence App Challenge/app/whisper/whisper-cli
+```
+
+### 5) Dev starten
 ```bash
 npm run dev
 ```
 
-### 5) Build (Production)
+### 6) Build (Production)
 ```bash
 npm run build
 npm run start
 ```
-
 ---
 ## Troubleshooting
 
@@ -119,3 +149,5 @@ app/
 - Auswahl der finalen UI‑Variante aus `ui-demos/`
 - Packaging via `electron-builder`
 - Persistente History + Export Formate
+
+
