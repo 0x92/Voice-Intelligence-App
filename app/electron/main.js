@@ -14,7 +14,7 @@ const {
 require("dotenv").config({ path: path.join(process.cwd(), ".env") });
 
 const { transcribeAudioBuffer } = require("./services/stt");
-const { enrichText } = require("./services/openai");
+const { enrichText } = require("./services/llm");
 
 let mainWindow = null;
 let tray = null;

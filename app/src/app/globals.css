@@ -8,6 +8,7 @@
   --text: #aaffaa;
   --muted: #66aa66;
   --bright: #00ff7a;
+  --ready: #7dff9a;
   --danger: #ef4444;
   --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
 }
@@ -183,6 +184,11 @@ main.matrix {
   box-shadow: 0 0 10px rgba(245, 158, 11, 0.7);
 }
 
+.status-dot.ready {
+  background: var(--ready);
+  box-shadow: 0 0 12px rgba(125, 255, 154, 0.8);
+}
+
 .status-dot.live {
   background: var(--danger);
   box-shadow: 0 0 12px rgba(239, 68, 68, 0.8);
@@ -346,6 +352,35 @@ select {
 
 .option-row {
   margin-top: 8px;
+}
+
+.provider-toggle {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.provider-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.provider-toggle button {
+  background: transparent;
+  border: 1px solid var(--panel-border);
+  color: var(--text);
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.provider-toggle button.active {
+  border-color: var(--bright);
+  color: var(--bright);
 }
 
 .checkbox {

@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 
 type Status = "idle" | "recording" | "transcribing" | "enriching" | "error";
 type Language = "de" | "en";
+type LlmProvider = "openai" | "ollama";
 
 const PRESETS = [
   {
@@ -52,10 +53,15 @@ const UI_TEXT = {
     },
     console: {
       title: "OPERATOR KONSOLE",
-      subtitle: "Voice Intelligence - Lokales STT - OpenAI",
+      subtitle: "Voice Intelligence - Lokales STT - LLM",
     },
     language: {
       label: "SPRACHE",
+    },
+    provider: {
+      label: "LLM",
+      openai: "OpenAI",
+      ollama: "Ollama",
     },
     errors: {
       label: "Fehler",
@@ -117,7 +123,7 @@ const UI_TEXT = {
       logLines: [
         "[14:02] Initialisiere Sprach-Engine...",
         "[14:03] Lokales Modell bereit.",
-        "[14:03] OpenAI-Kanal bereit.",
+        "[14:03] LLM-Kanal bereit.",
         "[14:04] Tastenkurzel registriert.",
       ],
     },
@@ -141,10 +147,15 @@ const UI_TEXT = {
     },
     console: {
       title: "OPERATOR CONSOLE",
-      subtitle: "Voice Intelligence - Local STT - OpenAI",
+      subtitle: "Voice Intelligence - Local STT - LLM",
     },
     language: {
       label: "LANGUAGE",
+    },
+    provider: {
+      label: "LLM",
+      openai: "OpenAI",
+      ollama: "Ollama",
     },
     errors: {
       label: "Error",
@@ -206,7 +217,7 @@ const UI_TEXT = {
       logLines: [
         "[14:02] Initializing voice engine...",
         "[14:03] Local model ready.",
-        "[14:03] OpenAI channel ready.",
+        "[14:03] LLM channel ready.",
         "[14:04] Hotkeys registered.",
       ],
     },
@@ -281,6 +292,7 @@ export default function Home() {
   const [preset, setPreset] = useState<PresetId>(PRESETS[0].id);
   const [language, setLanguage] = useState<Language>("de");
   const [includeEmojis, setIncludeEmojis] = useState(false);
+  const [llmProvider, setLlmProvider] = useState<LlmProvider>("openai");
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState<string>("default");
   const [showMarkdown, setShowMarkdown] = useState(false);
@@ -291,6 +303,7 @@ export default function Home() {
   const toggleRef = useRef<() => void>(() => {});
   const languageRef = useRef<Language>("de");
   const includeEmojisRef = useRef(false);
+  const llmProviderRef = useRef<LlmProvider>("openai");
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -346,6 +359,15 @@ export default function Home() {
     if (savedEmojis === "true" || savedEmojis === "false") {
       setIncludeEmojis(savedEmojis === "true");
     }
+    const savedProvider = window.localStorage.getItem("voice:llmProvider");
+    if (savedProvider === "openai" || savedProvider === "ollama") {
+      setLlmProvider(savedProvider);
+    } else {
+      const envProvider = process.env.NEXT_PUBLIC_LLM_PROVIDER?.toLowerCase();
+      if (envProvider === "openai" || envProvider === "ollama") {
+        setLlmProvider(envProvider);
+      }
+    }
     loadDevices();
     const handler = () => loadDevices();
     navigator.mediaDevices.addEventListener("devicechange", handler);
@@ -362,6 +384,11 @@ export default function Home() {
     window.localStorage.setItem("voice:includeEmojis", String(includeEmojis));
     includeEmojisRef.current = includeEmojis;
   }, [includeEmojis]);
+
+  useEffect(() => {
+    window.localStorage.setItem("voice:llmProvider", llmProvider);
+    llmProviderRef.current = llmProvider;
+  }, [llmProvider]);
 
   useEffect(() => {
     selectedDeviceRef.current = selectedDeviceId;
@@ -503,6 +530,7 @@ export default function Home() {
               preset,
               language: languageRef.current,
               includeEmojis: includeEmojisRef.current,
+              provider: llmProviderRef.current,
             });
             setEnriched(enrichment?.output ?? "");
           } else {
@@ -568,6 +596,7 @@ export default function Home() {
         preset,
         language,
         includeEmojis,
+        provider: llmProvider,
       });
       setEnriched(enrichment?.output ?? "");
       setStatus("idle");
@@ -666,7 +695,11 @@ export default function Home() {
                 </button>
               </div>
               <div className={`status-chip ${status === "recording" ? "live" : ""}`}>
-                <span className="status-dot" />
+                <span
+                  className={`status-dot ${
+                    status === "recording" ? "live" : status === "idle" ? "ready" : ""
+                  }`}
+                />
                 {statusLabel}
               </div>
             </div>
@@ -765,6 +798,24 @@ export default function Home() {
                 </label>
               </div>
 
+              <div className="provider-toggle">
+                <span>{text.provider.label}</span>
+                <div className="provider-buttons">
+                  <button
+                    className={llmProvider === "openai" ? "active" : ""}
+                    onClick={() => setLlmProvider("openai")}
+                  >
+                    {text.provider.openai}
+                  </button>
+                  <button
+                    className={llmProvider === "ollama" ? "active" : ""}
+                    onClick={() => setLlmProvider("ollama")}
+                  >
+                    {text.provider.ollama}
+                  </button>
+                </div>
+              </div>
+
               <div className="markdown-toggle">
                 <button
                   className={!showMarkdown ? "active" : ""}
@@ -805,7 +856,11 @@ export default function Home() {
         <section className="panel">
           <div className="header">{text.headers.systemLog}</div>
           <div className="log-line">
-            <span className={`status-dot ${status === "recording" ? "live" : ""}`} />
+            <span
+              className={`status-dot ${
+                status === "recording" ? "live" : status === "idle" ? "ready" : ""
+              }`}
+            />
             {text.system.status}: {statusLabel}
           </div>
           <div className="mini-wave">
@@ -844,7 +899,7 @@ export default function Home() {
             <br />
             {text.localMap.stt}: whisper.cpp
             <br />
-            {text.localMap.llm}: {process.env.NEXT_PUBLIC_LLM_NAME || "OpenAI"}
+            {text.localMap.llm}: {llmProvider === "ollama" ? "Ollama" : "OpenAI"}
             <br />
             {text.localMap.output}: {text.localMap.outputFormat}
           </div>

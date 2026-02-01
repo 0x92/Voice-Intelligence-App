@@ -12,6 +12,7 @@ declare global {
         preset: string;
         language?: "de" | "en";
         includeEmojis?: boolean;
+        provider?: "openai" | "ollama";
       }) => Promise<{
         output: string;
         mode?: string;

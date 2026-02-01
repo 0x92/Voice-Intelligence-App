@@ -19,6 +19,7 @@ Optimiert für Fokus‑Workflows (Hotkeys, Tray‑Modus, Recording‑Indicator).
 - On‑Screen Recording‑Indicator (Timer + Mic‑Name).
 - Lokale STT via **whisper.cpp** (ggml‑Modelle).
 - OpenAI‑Enrichment (Presets: Notes, Summary, Action Items, Email).
+- LLM Provider Switch (OpenAI / Ollama).
 - Geräte‑Auswahl für Mikrofon (persistiert).
 
 ---
@@ -33,7 +34,7 @@ Global Hotkeys, Tray, IPC, lokale Services.
 `ffmpeg` → WAV 16kHz → Whisper.cpp CLI → Textdatei.
 
 **LLM Service:**
-OpenAI Chat Completion → strukturierte Ausgabe.
+OpenAI oder Ollama → strukturierte Ausgabe.
 
 ---
 ## Design-Entscheidungen
@@ -45,6 +46,8 @@ OpenAI Chat Completion → strukturierte Ausgabe.
 
 ---
 ## Setup (Developer)
+
+Hinweis: In der UI kann der LLM-Provider per Schalter zwischen OpenAI und Ollama gewechselt werden (ueberschreibt LLM_PROVIDER fuer die Session).
 
 ### 1) Install
 ```bash
@@ -90,7 +93,15 @@ app/
 WHISPER_CPP_PATH=D:/Entwicklung/Voice Intelligence App Challenge/app/whisper/whisper-cli.exe
 WHISPER_MODEL_PATH=D:/Entwicklung/Voice Intelligence App Challenge/app/models/ggml-base.bin
 OPENAI_API_KEY=sk-...
+# OPENAI_API_KEY nur fuer OpenAI
 OPENAI_MODEL=gpt-4o-mini
+# LLM Provider (openai|ollama):
+LLM_PROVIDER=openai
+# Optional: UI default
+NEXT_PUBLIC_LLM_PROVIDER=openai
+# Ollama (lokal):
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3.1:8b
 # Deutsch erzwingen:
 WHISPER_CPP_ARGS=--language de
 ```
@@ -99,6 +110,10 @@ Linux Beispiel:
 ```env
 WHISPER_CPP_PATH=/home/<user>/Voice Intelligence App Challenge/app/whisper/whisper-cli
 ```
+
+Ollama Hinweis:
+- Ollama muss laufen: `ollama serve`
+- Modell laden: `ollama pull llama3.1:8b`
 
 ### 5) Dev starten
 ```bash
@@ -131,7 +146,7 @@ npm run start
 ---
 ## Sicherheit & Datenschutz
 - Audio bleibt lokal, Transkription erfolgt on‑device.
-- Nur der **Text** wird an OpenAI gesendet.
+- Bei OpenAI wird nur der **Text** gesendet; bei Ollama bleibt alles lokal.
 - API‑Key niemals committen; `.env` ist ignored.
 
 ---
@@ -149,5 +164,13 @@ app/
 - Auswahl der finalen UI‑Variante aus `ui-demos/`
 - Packaging via `electron-builder`
 - Persistente History + Export Formate
+
+
+
+
+
+
+
+
 
 

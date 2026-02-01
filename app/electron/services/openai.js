@@ -1,18 +1,4 @@
-const PRESET_INSTRUCTIONS = {
-  notes:
-    "Return structured notes with headings, bullets, and key decisions. Keep it concise.",
-  summary:
-    "Return a concise executive summary (3-5 sentences) plus 3 bullet highlights.",
-  todos:
-    "Extract action items as a checklist. Include owners and deadlines if mentioned.",
-  email:
-    "Rewrite as a polished professional email with a subject line and short closing.",
-};
-
-const LANGUAGE_OUTPUT = {
-  de: "German",
-  en: "English",
-};
+const { buildMessages } = require("./prompts");
 
 let clientPromise = null;
 
@@ -41,26 +27,10 @@ const enrichText = async ({
 
   const client = await getClient();
   const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
-  const instruction = PRESET_INSTRUCTIONS[preset] || PRESET_INSTRUCTIONS.notes;
-  const outputLanguage = LANGUAGE_OUTPUT[language] || LANGUAGE_OUTPUT.de;
-
-  const emojiInstruction = includeEmojis
-    ? "Include tasteful emojis where helpful."
-    : "Do not use emojis.";
-
   const completion = await client.chat.completions.create({
     model,
     temperature: 0.2,
-    messages: [
-      {
-        role: "system",
-        content: `You format transcripts into clean, usable outputs. Respond in Markdown with no preamble. Output language: ${outputLanguage}. ${emojiInstruction}`,
-      },
-      {
-        role: "user",
-        content: `${instruction}\n\nOutput language: ${outputLanguage}.\n\nTranscript:\n${text}`,
-      },
-    ],
+    messages: buildMessages({ text, preset, language, includeEmojis }),
   });
 
   const output = completion.choices?.[0]?.message?.content?.trim() ?? "";
